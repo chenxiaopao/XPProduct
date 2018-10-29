@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<dict>
+			<key>imageName</key>
+			<string>publish</string>
+			<key>title</key>
+			<string>发布采购</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>mine</string>
+			<key>title</key>
+			<string>我的采购</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>supply</string>
+			<key>title</key>
+			<string>供应大厅</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>imageName</key>
+			<string>category01</string>
+			<key>title</key>
+			<string>水果</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>category02</string>
+			<key>title</key>
+			<string>蔬菜</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>category03</string>
+			<key>title</key>
+			<string>畜牧水产</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>category04</string>
+			<key>title</key>
+			<string>粮油米面</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>category05</string>
+			<key>title</key>
+			<string>苗木花草</string>
+		</dict>
+		<dict>
+			<key>imageName</key>
+			<string>category06</string>
+			<key>title</key>
+			<string>全部</string>
+		</dict>
+	</array>
+</array>
+</plist>

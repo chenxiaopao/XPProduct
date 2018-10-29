@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>icon</key>
+		<string></string>
+		<key>title</key>
+		<string>清空缓存</string>
+		<key>subTitle</key>
+		<string>计算缓存中。。。</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string></string>
+		<key>title</key>
+		<string>系统版本</string>
+		<key>subTitle</key>
+		<string></string>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,14 @@
+use_frameworks!
+platform:ios,'8.0'
+target 'XPProduct' do
+pod 'MBProgressHUD'
+pod 'MJExtension'
+pod 'Masonry'
+pod 'MJRefresh'
+pod 'WebViewJavascriptBridge'
+pod 'AFNetworking'
+pod 'SDWebImage'
+pod 'TZImagePickerController'
+
+end
+

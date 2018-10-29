@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="XPBuyDetailUserInfoTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="334" height="125"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar_user" translatesAutoresizingMaskIntoConstraints="NO" id="dk6-my-4Vf">
+                    <rect key="frame" x="10" y="40.5" width="60" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="EMq-SI-g0F"/>
+                        <constraint firstAttribute="height" constant="60" id="F3z-qV-LkY"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="名称" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mAN-FZ-WLP">
+                    <rect key="frame" x="80" y="50.5" width="35" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用户信息" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3LA-oQ-8p5">
+                    <rect key="frame" x="10" y="10" width="69.5" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="查看详情" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaN-dz-dqp">
+                    <rect key="frame" x="244.5" y="10" width="69.5" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="1" green="0.47174598130000001" blue="0.065650822070000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="3LA-oQ-8p5" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="0yz-j8-CS3"/>
+                <constraint firstItem="3LA-oQ-8p5" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="7rJ-lz-wFf"/>
+                <constraint firstItem="mAN-FZ-WLP" firstAttribute="leading" secondItem="dk6-my-4Vf" secondAttribute="trailing" constant="10" id="DcU-e3-s2i"/>
+                <constraint firstItem="uaN-dz-dqp" firstAttribute="top" secondItem="3LA-oQ-8p5" secondAttribute="top" id="Fau-o6-Jcq"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="uaN-dz-dqp" secondAttribute="trailing" constant="20" id="GNv-Nu-ZMm"/>
+                <constraint firstItem="dk6-my-4Vf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="cLY-Ze-COJ"/>
+                <constraint firstItem="mAN-FZ-WLP" firstAttribute="top" secondItem="dk6-my-4Vf" secondAttribute="top" constant="10" id="hkV-S0-WSK"/>
+                <constraint firstItem="dk6-my-4Vf" firstAttribute="top" secondItem="3LA-oQ-8p5" secondAttribute="bottom" constant="10" id="tFp-C1-lNS"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="avatorView" destination="dk6-my-4Vf" id="TlD-Hq-r3m"/>
+                <outlet property="nameLabel" destination="mAN-FZ-WLP" id="xK4-FM-BZ1"/>
+            </connections>
+            <point key="canvasLocation" x="13" y="-205.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="avatar_user" width="80" height="80"/>
+    </resources>
+</document>
