@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class XPSupplyModel;
 @interface XPBuyDetailProductInfoTableViewCell : UITableViewCell
-
+@property (nonatomic,strong) XPSupplyModel *model;
 @end

@@ -33,11 +33,17 @@ static NSString *buyRecommendID = @"buyRecommendID";
     return self;
 }
 
+- (void)setSupplyArr:(NSArray *)supplyArr{
+    _supplyArr = supplyArr;
+    
+    [self reloadData];
+}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if ([self.buyDelegate respondsToSelector:@selector(buyTableViewDidScroll:)]){
         [self.buyDelegate buyTableViewDidScroll:self];
     }
 }
+
 
 #pragma mark - UITableViewDataSource UITableViewDelagete
 
@@ -81,7 +87,7 @@ static NSString *buyRecommendID = @"buyRecommendID";
     }else{
         
         XPBuyInfoTableViewCell *cell =  [self dequeueReusableCellWithIdentifier:buyRecommendID];
-
+        cell.model = self.supplyArr[indexPath.row];
         return cell;
     }
     
@@ -102,7 +108,7 @@ static NSString *buyRecommendID = @"buyRecommendID";
     if (section == 0){
         return self.categoryData.count;
     }else{
-        return 10;
+        return self.supplyArr.count;
     }
 }
 
@@ -144,9 +150,6 @@ static NSString *buyRecommendID = @"buyRecommendID";
     }
     return recommendLabelH;
 }
-
-
-
 
 
 #pragma mark - XPBuyCollectionViewDelegate

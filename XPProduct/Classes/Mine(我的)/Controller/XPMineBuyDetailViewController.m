@@ -7,7 +7,9 @@
 //
 
 #import "XPMineBuyDetailViewController.h"
-
+#import <MBProgressHUD/MBProgressHUD.h>
+#import "XPNetWorkTool.h"
+#import "XPSupplyModel.h"
 @interface XPMineBuyDetailViewController ()
 
 @end
@@ -16,7 +18,7 @@ static int const buyBottomBtnTag = 3000;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)setBtnPropertyWithBtn:(UIButton *)btn andTitle:(NSString *)title andBackgroundColor:(UIColor *)color{
@@ -28,70 +30,79 @@ static int const buyBottomBtnTag = 3000;
 
 - (void)addBottomView{
     NSString *leftTitle;
-    NSString *rightTitle;
+    
     switch (self.type) {
         case XPMineBuyOrSaleCellTypeActive:
         {
             leftTitle = @"下架";
-            rightTitle=@"修改";
         }
             break;
         case XPMineBuyOrSaleCellTypeInactive:
         {
-            leftTitle = @"删除";
-            rightTitle = @"上架";
+            leftTitle = @"上架";
         }
             break;
         case XPMineBuyOrSaleCellTypeDisabled:
         {
-            leftTitle = @"修改";
-            rightTitle = @"删除";
+            leftTitle = @"删除";
         }
             break;
     }
     
-    UIButton *leftBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, XP_SCREEN_HEIGHT-50, (XP_SCREEN_WIDTH-20)/2, 40)];
+    UIButton *leftBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, XP_SCREEN_HEIGHT-50, (XP_SCREEN_WIDTH-20), 40)];
     [self setBtnPropertyWithBtn:leftBtn andTitle:leftTitle andBackgroundColor:[UIColor blueColor]];
     leftBtn.tag = buyBottomBtnTag;
     [self setBtnRadiusWithBtn:leftBtn androundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft];
     [self.view addSubview:leftBtn];
     
     
-    UIButton *rightBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(leftBtn.frame), XP_SCREEN_HEIGHT-50, (XP_SCREEN_WIDTH-20)/2, 40)];
-    UIColor *rightColor =  [UIColor colorWithRed:255/255.0 green:120/255.0 blue:17/255.0 alpha:1];
-    [self setBtnPropertyWithBtn:rightBtn andTitle:rightTitle andBackgroundColor:rightColor];
-    [self setBtnRadiusWithBtn:rightBtn androundingCorners:UIRectCornerBottomRight|UIRectCornerTopRight];
-    [self.view addSubview:rightBtn];
 }
 
 - (void)bottomBtnClick:(UIButton *)sender{
     
     switch (self.type) {
         case XPMineBuyOrSaleCellTypeActive:{
-            
             if (sender.tag == buyBottomBtnTag) {
-                NSLog(@"下架");
-            }else{
-                NSLog(@"修改");
+                NSString *state = @"0";
+                NSString *title = @"下架";
+                [self updateSupplyWithState:state andTitle:title];
             }
             break;
         }
         case XPMineBuyOrSaleCellTypeInactive: {
             if (sender.tag == buyBottomBtnTag) {
-                NSLog(@"删除");
-            }else{
-                NSLog(@"上架");
+                NSString *state = @"1";
+                NSString *title = @"上架";
+                [self updateSupplyWithState:state andTitle:title];
             }
             break;
         }
         case XPMineBuyOrSaleCellTypeDisabled: {
             if (sender.tag == buyBottomBtnTag) {
-                NSLog(@"修改");
-            }else{
-                NSLog(@"删除");
+                
             }
             break;
         }
     }
+}
+
+- (void)updateSupplyWithState:(NSString *)state andTitle:(NSString *)title{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = [NSString stringWithFormat:@"正在%@。。。",title];
+    [[XPNetWorkTool shareTool] updateSupplyInfoWithState:state andId:self.supplyModel._id andCallBack:^(NSInteger tag) {
+        if(tag){
+            hud.label.text = [NSString stringWithFormat:@"%@成功",title];
+        }else{
+            hud.label.text = [NSString stringWithFormat:@"%@失败",title];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshData" object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [hud removeFromSuperview];
+            [self.navigationController popViewControllerAnimated:NO];
+            
+        });
+    }];
+    
 }
 @end

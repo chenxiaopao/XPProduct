@@ -12,10 +12,10 @@
 @property (nonatomic,assign) int topic_id ;
 @property (nonatomic,strong) NSString *content;
 @property (nonatomic,assign) int from_uid ;
-@property (nonatomic,strong) NSString *from_uname;
+@property (nonatomic,strong) NSString *user_name;
 @property (nonatomic,assign) int to_uid;
-@property (nonatomic,strong) NSString *timeStr;
-@property (nonatomic,strong) NSString *imageUrl;
+@property (nonatomic,strong) NSString *time;
+@property (nonatomic,strong) NSString *avatar;
 @property (nonatomic,strong) NSArray *subModel;
 @property (nonatomic,assign) float height;
 @end

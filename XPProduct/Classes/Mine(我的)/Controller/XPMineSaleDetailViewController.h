@@ -9,5 +9,6 @@
 #import "XPSaleDetailViewController.h"
 #import "XPConst.h"
 @interface XPMineSaleDetailViewController : XPSaleDetailViewController
+
 @property (nonatomic,assign) XPMineBuyOrSaleCellType type;
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class XPSupplyModel;
 @interface XPBuyDetailUserInfoTableViewCell : UITableViewCell
+@property (nonatomic,strong) XPSupplyModel *model;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *avatorView;
 

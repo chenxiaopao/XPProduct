@@ -35,17 +35,17 @@
 }
 
 - (void)setModel:(XPCommentModel *)model{
-
+    
     _model = model;
-    self.timeLabel.text = model.timeStr;
-    self.nameLabel.text = model.from_uname;
+    self.timeLabel.text = model.time;
+    self.nameLabel.text = model.user_name;
     self.commentLabel.text = model.content;
     
     CGFloat width = XP_SCREEN_WIDTH - self.timeLabel.x-30;
     self.commentLabel.height = [self getHeightWithString:self.commentLabel.text andFont:[UIFont systemFontOfSize:17] andWidth:0];
     
     if (model.height > 0){
-        NSLog(@"1");
+        
         CGRect frame = CGRectMake(0,0,1,1);
         XPDetailSubCommentInfoTableView *tableView = [[XPDetailSubCommentInfoTableView alloc]initWithFrame:frame style:UITableViewStylePlain andModelData:model.subModel];
         [self.contentView addSubview:tableView];
@@ -65,9 +65,7 @@
                 make.bottom.equalTo(self.contentView).offset(-10);
             }];
         }
-//        [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
-    
 }
 
 - (CGFloat)getHeightWithString:(NSString *)str andFont:(UIFont *)font andWidth:(CGFloat)width{

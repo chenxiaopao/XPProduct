@@ -7,40 +7,13 @@
 //
 
 #import "XPCollectChildViewController.h"
-#import "XPConst.h"
-#import "XPSaleInfoTableViewCell.h"
-#import "XPBuyInfoTableViewCell.h"
-#import "MJRefresh.h"
-#import "XPSaleDetailViewController.h"
-#import "XPMineSaleDetailViewController.h"
-#import "XPBuyDetailViewController.h"
+#import "XPPurchaseModel.h"
+#import "XPNetWorkTool.h"
 @interface XPCollectChildViewController ()
 @end
 
 @implementation XPCollectChildViewController
 
-- (void)getData{
-    switch (self.type) {
-        case XPMineItemTypeCollect:
-        {
-            if (self.isBuy){
-                self.dataArr = [NSMutableArray arrayWithArray: @[@"1"]];
-            }else{
-                self.dataArr = [NSMutableArray arrayWithArray:@[@"1",@"1"]];
-            }
-        }
-            break;
-        case XPMineItemTypeHistory:
-        {
-            if(self.isBuy){
-                self.dataArr = [NSMutableArray arrayWithArray:@[@"1",@"1",@"1"]];
-            }else{
-                self.dataArr = [NSMutableArray arrayWithArray:@[@"1",@"1",@"1",@"1"]];
-            }
-        }
-            break;
-    }
-}
 
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -65,7 +38,8 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:@"考虑清楚？？" preferredStyle:UIAlertControllerStyleAlert];
     __weak __typeof(self) weakSelf = self;
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf.dataArr removeObjectAtIndex:indexPath.item];
+        [weakSelf updateHistoryData:weakSelf.dataArr[indexPath.row]];
+        [weakSelf.dataArr removeObjectAtIndex:indexPath.row];
         [weakSelf.tableView reloadData];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
@@ -74,6 +48,7 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
     if(self.type == XPMineItemTypeCollect){
         return @"取消收藏";
@@ -81,4 +56,20 @@
     return @"删除历史";
 }
 
+- (void)updateHistoryData:(XPPurchaseModel *)model{
+    int type = 0;
+    if (!self.isBuy){
+        type = 1;
+    }
+    NSDictionary *dict = @{
+                           @"user_id":[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"],
+                           @"product_id":@(model._id),
+                           @"tableType":@(self.type),
+                           @"updateHistory":@"1",
+                           @"type":@(type)
+                           };
+    [[XPNetWorkTool shareTool] loadCollectBrowseInfoWithParam:dict andCallBack:^(id obj) {
+        
+    }];
+}
 @end

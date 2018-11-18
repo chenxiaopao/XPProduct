@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class XPSupplyModel;
 @interface XPBuyDetailViewController : UIViewController
+@property (nonatomic,strong) XPSupplyModel *supplyModel;
+- (instancetype)initWithhSupplyModel:(XPSupplyModel *)model;
 - (void)addBottomView;
 -(void)setBtnRadiusWithBtn:(UIButton *)btn androundingCorners:(UIRectCorner )corner;
-@property (nonatomic,assign) BOOL notCanSelected;
+
 @end

@@ -7,7 +7,13 @@
 //
 
 #import "XPInfoDetailViewController.h"
-
+#import <WebKit/WebKit.h>
+#import "XPNetWorkTool.h"
+#import "XPImageModel.h"
+#import "XPInfoDetailModel.h"
+#import "MJExtension.h"
+#import "WebViewJavascriptBridge.h"
+#import "SDWebImageManager.h"
 @interface XPInfoDetailViewController ()
 @property (nonatomic,weak) UIWebView *webView;
 @property (nonatomic,strong) WebViewJavascriptBridge *bridge;
@@ -25,6 +31,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+     
     [WebViewJavascriptBridge enableLogging];
     self.bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
     [[XPNetWorkTool shareTool] loadInfoDetailDataFinish:^(id result, NSError *error) {
@@ -82,7 +89,7 @@
         if ([imageManager.imageCache diskImageDataExistsWithKey:cacheKey]){
             NSString *jsData =[NSString stringWithFormat:@"replaceImage%@,%@",[self replaceUrlSpecialString:model.src],imagePath];
             [self.bridge callHandler:@"showImage" data:jsData responseCallback:^(id responseData) {
-                NSLog(@"%@",responseData);
+                NSLog(@"我问问 %@",responseData);
                 
             }];
         }else{

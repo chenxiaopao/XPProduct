@@ -16,20 +16,103 @@
 #import "UIView+XPViewFrame.h"
 #import "XPMineUserCardViewController.h"
 #import "XPBuyCommentViewController.h"
+#import "XPSupplyModel.h"
+#import "WebViewJavascriptBridge.h"
+#import "SDWebImageManager.h"
+#import "XPAlertTool.h"
+#import "XPNetWorkTool.h"
+#import "XPCollectBrowseModel.h"
+#import <MJExtension/MJExtension.h>
+#import "XPBuyNoCommentView.h"
+#import "XPCommentModel.h"
+@interface XPBuyDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,XPBuyDetailHeadViewDelegate,XPBuyNoCommentViewDelegate>
 
-@interface XPBuyDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,XPBuyDetailHeadViewDelegate>
 @property (nonatomic,weak) UIView *alphaView;
 @property (nonatomic,weak) UITableView *tableView;
-@property (nonatomic,weak) WKWebView *webView;
+@property (nonatomic,weak) UIWebView *webView;
 @property (nonatomic,weak) UIScrollView *scrollView;
 @property (nonatomic,assign) CGFloat tableViewContentSizeHeight;
 @property (nonatomic,assign) CGFloat webViewContentSizeHeight;
+@property (nonatomic,strong) NSArray *commentModelArr;
+@property (nonatomic,strong) WebViewJavascriptBridge *bridge;
+@property (nonatomic,strong) XPCollectBrowseModel *collectBrowseModel;
+@property (nonatomic,weak) UIButton *collectBtn;
 @end
 
 static NSString *const productInfoCellID = @"productInfoCellID";
 static NSString *const userInfoCellID = @"userInfoCellID";
 static NSString *const commentInfoCellID = @"commentInfoCellID";
+
 @implementation XPBuyDetailViewController
+
+- (instancetype)initWithhSupplyModel:(XPSupplyModel *)model
+{
+    self = [super init];
+    if (self ) {
+        self.supplyModel = model;
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"]){
+            [self loadCollectDataWithProduct_id:self.supplyModel._id];
+            [self loadHistoryDataWithProduct_id:self.supplyModel._id];
+            [self loadCommentDataWithProduct_id:self.supplyModel._id];
+        }
+
+    }
+    return self;
+}
+- (void)loadCommentDataWithProduct_id:(NSInteger)product_id{
+    [[XPNetWorkTool shareTool]loadCommentInfoWithProduct_Id:product_id UserId:0 andCallback:^(NSArray * modelArr) {
+        self.commentModelArr = [XPCommentModel mj_objectArrayWithKeyValuesArray:modelArr];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+}
+- (void)loadHistoryDataWithProduct_id:(NSInteger)product_id{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm:ss";
+    NSString *timeTitle = [dateFormatter stringFromDate:[NSDate new]];
+    NSDictionary *dict = @{
+                           @"user_id":[[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"],
+                           @"state":@"1",
+                           @"product_id":@(product_id),
+                           @"tableType":@"0",
+                           @"browseTime":timeTitle,
+                           @"type":@"1"
+                           };
+    //    __weak typeof(self) weakSelf = self;s
+    
+    [[XPNetWorkTool shareTool] loadCollectBrowseInfoWithParam:dict andCallBack:^(id obj) {
+        
+    }];
+    
+}
+
+- (void)loadCollectDataWithProduct_id:(NSInteger)product_id{
+    
+    NSDictionary *dict = @{
+                           @"user_id":[[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"],
+                           @"state":@"1",
+                           @"product_id":@(product_id),
+                           @"findOne":@"1",
+                           @"tableType":@"1",
+                           @"type":@"1"
+                           };
+    [XPCollectBrowseModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{
+                 @"_id":@"id"
+                 };
+    }];
+    
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [[XPNetWorkTool shareTool] loadCollectBrowseInfoWithParam:dict andCallBack:^(id obj) {
+        if (obj){
+            weakSelf.collectBrowseModel = [XPCollectBrowseModel mj_objectWithKeyValues:obj];
+            [weakSelf setCollectBtnTitle];
+        }
+    }];
+    
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,14 +136,16 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     UIButton *commentBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, 10, (bottomView.width-20)/3, 40)];
     commentBtn.backgroundColor = [UIColor lightGrayColor];
     [self setBtnRadiusWithBtn:commentBtn androundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft];
+    
     [commentBtn setTitle:@"添加评论" forState:UIControlStateNormal];
     [commentBtn addTarget:self action:@selector(commentBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *collectBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(commentBtn.frame), commentBtn.y,(bottomView.width-20)/3, commentBtn.height)];
+
     [collectBtn setTitle:@"添加收藏" forState:UIControlStateNormal];
     collectBtn.backgroundColor = [UIColor blueColor];
     [collectBtn addTarget:self action:@selector(collectBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    
+    self.collectBtn = collectBtn;
     
     UIButton *callBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(collectBtn.frame), commentBtn.y,(bottomView.width-20)/3, commentBtn.height)];
     [callBtn setTitle:@"打电话" forState:UIControlStateNormal];
@@ -73,22 +158,101 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     [bottomView addSubview:callBtn];
 }
 
+- (void)setCollectBtnTitle{
+    NSString *title = nil;
+    if (self.collectBrowseModel.state == 1){
+        title = @"取消收藏";
+    }else{
+        title = @"添加收藏";
+    }
+    [self.collectBtn setTitle:title forState:UIControlStateNormal];
+}
+
 - (void)callBtnClick:(UIButton *)sender{
-    NSMutableString * phoneNumber=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"1001011"];
-    WKWebView * webView = [[WKWebView alloc] init];
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"isLogin"]){
+        [XPAlertTool callToUserWithPhone:self.supplyModel.user_phone toView:self.view];
+        
+    }else{
+        [XPAlertTool showAlertWithSupeView:self.view andText:@"请先登录"];
+    }
     
-    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:phoneNumber]]];
-    [self.view addSubview:webView];
 }
 
 - (void)commentBtnClick:(UIButton *)sender{
+    
     XPBuyCommentViewController *vc =[[XPBuyCommentViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:NO];
+    vc.commentDataArr = self.commentModelArr;
+    vc.product_id = self.supplyModel._id;
+    vc.isShowTextField = YES;
+    [XPAlertTool showLoginViewControllerWithVc:self orOtherVc:vc andSelectedIndex:0];
+//    [self.navigationController pushViewController:vc animated:NO];
 }
 
 - (void)collectBtnClick:(UIButton *)sender{
-    NSLog(@"收藏");
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"isLogin"]){
+        if (self.collectBrowseModel.state == 1){//state为1表示已收藏，当前显示为取消收藏
+            [sender setTitle:@"添加收藏" forState:UIControlStateNormal];
+            [self CollectActionIsAdd:NO];
+        }else{
+            [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
+            [self CollectActionIsAdd:YES];
+        }
+    }else{
+        [XPAlertTool showAlertWithSupeView:self.view andText:@"请先登录"];
+    }
+
 }
+
+- (void)CollectActionIsAdd:(BOOL)isAdd{
+    
+    NSMutableDictionary *mDict = [NSMutableDictionary dictionary];
+    NSString *title;
+    if (isAdd){
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+        dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm:ss";
+        NSString *timeTitle = [dateFormatter stringFromDate:[NSDate new]];
+        NSDictionary *dict = @{
+                               @"user_id":[[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"],
+                               @"product_id":[NSString stringWithFormat:@"%ld",(long)self.supplyModel._id],
+                               @"tableType":@"1",
+                               @"browseTime":timeTitle,
+                               @"state":@"1",
+                               @"type":@"1"
+                               };
+        title = @"添加成功";
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"supplyRefreshing" object:nil];
+        [mDict addEntriesFromDictionary:dict];
+    }else{
+        NSDictionary *dict = @{
+                               @"id":[NSString stringWithFormat:@"%ld",(long)self.collectBrowseModel._id],
+                               @"tableType":@"1",
+                               @"type":@"0"
+                               
+                               };
+        [mDict addEntriesFromDictionary:dict];
+        title = @"取消成功";
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"supplyRefreshing" object:nil];
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    [[XPNetWorkTool shareTool] loadCollectBrowseInfoWithParam:mDict andCallBack:^(NSDictionary *dict) {
+        [XPAlertTool showAlertWithSupeView:weakSelf.view andText:title];
+        if (![dict objectForKey:@"success"]){
+            [XPCollectBrowseModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+                return @{
+                         @"_id":@"id"
+                         };
+            }];
+            weakSelf.collectBrowseModel =  [XPCollectBrowseModel mj_objectWithKeyValues:dict];
+        }else{
+            weakSelf.collectBrowseModel  = nil;
+        }
+        
+    }];
+    
+}
+
+
 -(void)setBtnRadiusWithBtn:(UIButton *)btn androundingCorners:(UIRectCorner )corner{
     UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:btn.bounds byRoundingCorners: corner cornerRadii:CGSizeMake(10, 10)];
     CAShapeLayer *layer = [[CAShapeLayer alloc]init];
@@ -102,6 +266,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     [self.webView addObserver:self forKeyPath:@"scrollView.contentSize" options:NSKeyValueObservingOptionNew context:nil];
 
 }
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
     [self setScrollViewContentSize];
 }
@@ -109,20 +274,24 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 - (void)setScrollViewContentSize{
     CGFloat tableViewContentSizeHeight =  self.tableView.contentSize.height;
     CGFloat webViewContentSizeHeight =  self.webView.scrollView.contentSize.height;
+    
     self.scrollView.contentSize = CGSizeMake(self.scrollView.width, tableViewContentSizeHeight+webViewContentSizeHeight);
     self.tableViewContentSizeHeight = tableViewContentSizeHeight;
     self.webViewContentSizeHeight = webViewContentSizeHeight;
+
+//        self.scrollView.contentSize = CGSizeMake(0, tableViewContentSizeHeight+webViewContentSizeHeight+(XP_SCREEN_HEIGHT));
 //    NSLog(@"%f,%f",tableViewContentSizeHeight,webViewContentSizeHeight);
 }
 
 -(void)dealloc{
+    NSLog(@"%s",__func__);
     [self.tableView removeObserver:self forKeyPath:@"contentSize"];
     [self.webView removeObserver:self forKeyPath:@"scrollView.contentSize"];
 }
 
 - (void)setTableHeadViewAndFooterView{
-    NSArray *imageArr = @[@"boluo",@"nihoutao",@"tudou",@"caomei"];
-    XPBuyDetailHeadView *headView = [[XPBuyDetailHeadView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT/2) imageArr:imageArr];
+    
+    XPBuyDetailHeadView *headView = [[XPBuyDetailHeadView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT/2) imageArr:self.supplyModel.images];
     headView.delegate = self;
     self.tableView.tableHeaderView = headView;
     
@@ -147,7 +316,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 }
 
 - (void)setTableViewAndWebView{
-    UIScrollView *scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT*2)];
+    UIScrollView *scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-50)];
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.delegate =self;
     scrollView.backgroundColor = [UIColor whiteColor];
@@ -160,14 +329,21 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     tableView.delegate = self;
     tableView.dataSource = self;
     self.tableView = tableView;
+    [scrollView addSubview:tableView];
     
     
     
-    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc]init];
-    WKWebView *webView = [[WKWebView alloc]initWithFrame:CGRectMake(0, XP_SCREEN_HEIGHT, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT) configuration:config];
-    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.jianshu.com/p/3721d736cf68"]]];
-    webView.backgroundColor = [UIColor blueColor];
+    
+    UIWebView *webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, XP_SCREEN_HEIGHT, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT)];
+    
+    [scrollView addSubview:webView];
     self.webView = webView;
+    [self.view addSubview:scrollView];
+    [WebViewJavascriptBridge enableLogging];
+
+    self.bridge = [WebViewJavascriptBridge bridgeForWebView:webView];
+    [self setWebViewDataByData:self.supplyModel.images];
+    
     
     if iOS11_LATER{
         [scrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
@@ -177,23 +353,24 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     
-    [scrollView addSubview:tableView];
-    [scrollView addSubview:webView];
+    
     tableView.scrollEnabled = NO;
     webView.scrollView.scrollEnabled = NO;
-    [self.view addSubview:scrollView];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init]];
+//    self.navigationController.navigationBar.translucent =  YES;
+    [self loadCommentDataWithProduct_id:self.supplyModel._id];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     CGFloat offsetY = scrollView.contentOffset.y;
     
-    
+
     if (offsetY <= 100){
         self.alphaView.alpha = offsetY/100 * 1;
         self.navigationItem.title = @"";
@@ -202,7 +379,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
         self.alphaView.alpha =  1;
     }
     CGFloat tableViewHeight = self.tableView.height;
-    CGFloat webViewHeight = self.webView.height;
+    
     if (scrollView != self.scrollView){
         return ;
     }
@@ -220,36 +397,50 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
         self.tableView.y = self.tableViewContentSizeHeight-tableViewHeight;
         self.tableView.contentOffset = CGPointMake(0, self.tableViewContentSizeHeight-tableViewHeight);
         self.webView.scrollView.contentOffset =CGPointZero;
-    }else if (offsetY < self.tableViewContentSizeHeight + self.webViewContentSizeHeight-webViewHeight){
+    }else
+//        if (offsetY < self.tableViewContentSizeHeight + self.webViewContentSizeHeight-webViewHeight)
+    {
         self.tableView.contentOffset = CGPointMake(0, self.tableViewContentSizeHeight-tableViewHeight);
         self.webView.y = offsetY;
-        self.webView.scrollView.contentOffset = CGPointMake(0, offsetY);
-    }else if (offsetY <= self.webViewContentSizeHeight+self.tableViewContentSizeHeight){
-        self.tableView.contentOffset = CGPointMake(0, self.tableViewContentSizeHeight-tableViewHeight);
-        self.webView.y = self.webViewContentSizeHeight+self.tableViewContentSizeHeight;
-        self.webView.scrollView.contentOffset = CGPointMake(0, self.webViewContentSizeHeight+self.tableViewContentSizeHeight);
+        self.webView.scrollView.contentOffset = CGPointMake(0, offsetY-self.tableViewContentSizeHeight);
+        
     }
+//    else if (offsetY <= self.webViewContentSizeHeight+self.tableViewContentSizeHeight){
+//        self.tableView.contentOffset = CGPointMake(0, self.tableViewContentSizeHeight-tableViewHeight);
+//        self.webView.y = self.webViewContentSizeHeight+self.tableViewContentSizeHeight;
+//        self.webView.scrollView.contentOffset = CGPointMake(0, self.webViewContentSizeHeight+self.tableViewContentSizeHeight);
+//    }
     
 }
+
+
+
 
 #pragma mark - UITableView协议
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {
         case 0:{
             XPBuyDetailProductInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:productInfoCellID];
-            
+            cell.model = self.supplyModel;
             return cell;
             break;
         }
         case 1:{
             XPBuyDetailUserInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:userInfoCellID];
+            cell.model = self.supplyModel;
             return cell;
             break;
         }
         case 2:{
-            XPBuyDetailCommentInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:commentInfoCellID];
-            
-            return cell;
+            if (self.commentModelArr.count==0){
+                XPBuyNoCommentView *commentView = [[XPBuyNoCommentView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, 125)];
+                commentView.delegate = self;
+                return commentView;
+            }else{
+                XPBuyDetailCommentInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:commentInfoCellID];
+                cell.model = self.commentModelArr[0];
+                return cell;
+            }
             break;
         }
     }
@@ -275,13 +466,13 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 }
 
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (section == 2){
         return 0;
     }
     return 15;
 }
+
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, 15)];
@@ -291,14 +482,14 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (self.notCanSelected){
-        return;
-    }
+   
     if (indexPath.section == 1){
         XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]init];
         [self.navigationController pushViewController:vc animated:NO];
     }else if(indexPath.section==2){
         XPBuyCommentViewController *vc =[[XPBuyCommentViewController alloc]init];
+        vc.commentDataArr = self.commentModelArr;
+        vc.product_id = self.supplyModel._id;
         [self.navigationController pushViewController:vc animated:NO];
     }
 }
@@ -310,5 +501,72 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     [UIView animateWithDuration:0.5 animations:^{
         self.scrollView.contentOffset = CGPointMake(0, y);
     }];
+}
+
+
+#pragma mark - WebViewJavascriptBridge
+- (void)setWebViewDataByData:(NSArray *)images{
+
+    
+    NSMutableString *allStr = [NSMutableString stringWithString:@""];
+    for (NSString *imageUrl in images) {
+        CGFloat width = XP_SCREEN_WIDTH -20;
+        CGFloat Height = width *1.2;
+        NSString *imageStr = [NSString stringWithFormat:@"<img src = 'loading' id = '%@' width = '%.0f' height = '%.0f' hspace='0.0' vspace='5'>",[self replaceUrlSpecialString:imageUrl],width,Height];
+        [allStr appendString:imageStr];
+        
+        
+    }
+    [self setImageFromDownloaderOrDiskByImageUrlArray:images];
+    
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:@"webViewHtml" ofType:@"html"];
+    NSMutableString *htmlStr = [NSMutableString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    [htmlStr replaceOccurrencesOfString:@"<p>news</p>" withString:allStr options:NSCaseInsensitiveSearch range: [htmlStr rangeOfString:@"<p>news</p>"]];
+    [self.webView loadHTMLString:htmlStr baseURL:nil];
+    if (images.count == 1){
+        self.webView.height = (XP_SCREEN_WIDTH-20)*1.3;
+    }
+    
+}
+- (void)setImageFromDownloaderOrDiskByImageUrlArray:(NSArray *)imageArray{
+    SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"default/com.hackemist.SDWebImageCache.default"];
+    
+    for (NSString *imageUrl in imageArray) {
+        NSString *cacheKey = [imageManager cacheKeyForURL:[NSURL URLWithString:[self replaceUrlSpecialString:imageUrl]]];
+        NSString *imagePath = [imageManager.imageCache cachePathForKey:cacheKey inPath:filePath];
+        if ([imageManager.imageCache diskImageDataExistsWithKey:cacheKey]){
+            NSString *jsData =[NSString stringWithFormat:@"replaceImage%@,%@",[self replaceUrlSpecialString:imageUrl],imagePath];
+            [self.bridge callHandler:@"showImage" data:jsData responseCallback:^(id responseData) {
+                NSLog(@"%@",responseData);
+                
+            }];
+        }else{
+            [imageManager.imageDownloader downloadImageWithURL:[NSURL URLWithString: imageUrl] options:SDWebImageDownloaderProgressiveDownload progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                
+            } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                if (finished){
+                    [imageManager.imageCache storeImage:image forKey:[self replaceUrlSpecialString:imageUrl] completion:^{
+                        NSString *jsData =[NSString stringWithFormat:@"replaceImage%@,%@",[self replaceUrlSpecialString:imageUrl],imagePath];
+                        [self.bridge callHandler:@"showImage" data:jsData responseCallback:^(id responseData) {
+                            NSLog(@"%@",responseData);
+                            
+                        }];
+                    }];
+                }
+            }];
+            
+        }
+    }
+}
+- (NSString *)replaceUrlSpecialString:(NSString *)string {
+    
+    return [string stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+}
+
+#pragma mark - XPBuyNoComentViewDelegate
+- (void)buyNoCommentView:(XPBuyNoCommentView *)view commentBtnClick:(UIButton *)commentBtn{
+    [self commentBtnClick:commentBtn];
 }
 @end

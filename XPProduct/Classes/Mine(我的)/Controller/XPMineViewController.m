@@ -10,7 +10,7 @@
 #import "XPMineMiddleCollectionViewCell.h"
 #import "XPCollectViewController.h"
 #import "XPMineBuyOrSaleViewController.h"
-#import "XPBuyCommentViewController.h"
+#import "XPMineCommentTableViewController.h"
 #import "XPMineUserDetailTableViewController.h"
 #import "UIImage+XPOriginImage.h"
 
@@ -142,14 +142,14 @@ static NSString *const mineMiddleCellID = @"mineMiddleCellID";
     return cell;
 }
 
-
-
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.cellDataArr.count;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 60;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{;
     UIViewController *vc = [NSClassFromString(self.pushVcArray[indexPath.row]) new];
     if (indexPath.row == 0){
@@ -190,7 +190,7 @@ static NSString *const mineMiddleCellID = @"mineMiddleCellID";
         collect.type = type;
         [self.navigationController pushViewController:collect animated:YES];
     }else{
-        XPBuyCommentViewController *vc = [[XPBuyCommentViewController alloc]init];
+        XPMineCommentTableViewController *vc = [[XPMineCommentTableViewController alloc]init];
         [self.navigationController pushViewController:vc animated:YES];
     }
    

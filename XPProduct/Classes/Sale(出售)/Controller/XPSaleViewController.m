@@ -27,6 +27,7 @@
 @property (nonatomic,strong) NSArray *dataArr;
 @property (nonatomic,strong) NSArray *recommendArr;
 @property (nonatomic,strong) NSString *selectedTitle;
+@property (nonatomic,strong) NSArray *collectArr;
 @property (nonatomic,weak) UIButton *firstBtn;
 @end
 
@@ -113,9 +114,9 @@ static  NSString *saleRecommendCellID = @"saleRecommendCellID";
                  @"_id":@"id"
                  };
     }];
-    
+   
     [[XPNetWorkTool shareTool] loadPurchaseInfoWithUser_id:nil andState:nil andName:title CallBack:^(NSArray *modelArr, NSError *error) {
-        if (!error){
+        if (error==nil){
             if (modelArr.count > 0){
                 weakSelf.dataArr = [XPPurchaseModel mj_objectArrayWithKeyValuesArray:modelArr];
             }else{
@@ -123,12 +124,13 @@ static  NSString *saleRecommendCellID = @"saleRecommendCellID";
                 [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"没有更多数据啦"];
             }
             
-            [self.tableView reloadData];
+            [weakSelf.tableView reloadData];
         }else{
             [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"服务器连接失败"];
         }
-        [weakSelf.tableView.mj_footer endRefreshing];
+        [weakSelf.tableView.mj_header endRefreshing];
     }];
+    
     
     
 }
@@ -139,11 +141,14 @@ static  NSString *saleRecommendCellID = @"saleRecommendCellID";
     tableView.dataSource = self;
     [tableView registerNib:[UINib nibWithNibName:@"XPSaleInfoTableViewCell" bundle:nil] forCellReuseIdentifier:saleRecommendCellID];
     self.tableView = tableView;
-    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-    
-    tableView.mj_footer = footer;
+//    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+//
+//    tableView.mj_footer = footer;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    [self.tableView.mj_footer beginRefreshing];
+//    [self.tableView.mj_footer beginRefreshing];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    tableView.mj_header = header;
+    [tableView.mj_header beginRefreshing];
     [self.view addSubview:tableView];
     
 }
@@ -280,15 +285,15 @@ static  NSString *saleRecommendCellID = @"saleRecommendCellID";
         case 0:
         {
             XPSalePublishViewController *vc = [[XPSalePublishViewController alloc]init];
-            [self.navigationController pushViewController:vc animated:NO];
+            [XPAlertTool showLoginViewControllerWithVc:self orOtherVc:vc andSelectedIndex:1];
+//            [self.navigationController pushViewController:vc animated:NO];
         }
             break;
         case 1:
         {
             XPMineBuyOrSaleViewController *vc = [[XPMineBuyOrSaleViewController alloc]init];
-            
-            [self.navigationController pushViewController:vc animated:YES];
-            
+            [XPAlertTool showLoginViewControllerWithVc:self orOtherVc:vc andSelectedIndex:1];
+//            [self.navigationController pushViewController:vc animated:YES];
             break;
         }
         case 2:

@@ -12,8 +12,10 @@
 #import "XPCommentModel.h"
 #import "UIView+XPViewFrame.h"
 #import "XPNavigationViewController.h"
+#import "XPNetWorkTool.h"
+#import "XPAlertTool.h"
 @interface XPBuyCommentViewController () <XPDetailCommentInfoTableViewCellDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
-@property (nonatomic,strong) NSMutableArray *commentDataArr;
+
 @property (nonatomic,weak) UITableView *tableView;
 @property (nonatomic,assign) CGFloat tableViewHeight;
 @property (nonatomic,assign) CGFloat cellHeight;
@@ -25,71 +27,14 @@
 static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
 
 @implementation XPBuyCommentViewController
-- (NSMutableArray *)commentDataArr{
-    if (_commentDataArr == nil){
-        NSArray *arr = @[@{@"content":@"我送你是是是我送你是是是宿舍是我送你是是是宿舍是我送你是是是宿舍是宿舍是是是",
-                           @"from_uname":@"小炮",
-                           @"from_uid":@1,
-                           @"timeStr":@"2018-10-05",
-                           @"subModel": @[@{
-                                              @"content":@"我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是我送你是是",
-                                              @"from_uname":@"大头",
-                                              @"to_uid":@1,
-                                              @"timeStr":@"2018-10-06",
-                                              @"from_uid":@22
-                                              }]
-                           },
-                         @{@"content":@"我送你是是是宿舍是是是",
-                           @"from_uname":@"大炮",
-                           @"from_uid":@1,
-                           @"timeStr":@"2018-10-05",
-                           @"subModel": @[@{
-                                              @"content":@"他天天他他他他他他他他他",
-                                              @"from_uname":@"大头",
-                                              @"to_uid":@1,
-                                              @"timeStr":@"2018-10-06",
-                                              @"from_uid":@2
-                                              }]
-                           },
-                         @{@"content":@"我送你是是是宿送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是舍是是是",
-                           @"from_uname":@"大炮",
-                           @"from_uid":@1,
-                           @"timeStr":@"2018-10-05",
-                           @"subModel": @[@{
-                                              @"content":@"他天天送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是他他他他他他他他他",
-                                              @"from_uname":@"大头",
-                                              @"to_uid":@1,
-                                              @"timeStr":@"2018-10-06",
-                                              @"from_uid":@2
-                                              },@{
-                                              @"content":@"他天天送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是他他他他他他他他他",
-                                              @"from_uname":@"大头",
-                                              @"to_uid":@1,
-                                              @"timeStr":@"2018-10-06",
-                                              @"from_uid":@2
-                                              }]
-                           },
-                         @{@"content":@"我送你是是是宿送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是舍是是是",
-                           @"from_uname":@"大炮",
-                           @"from_uid":@1,
-                           @"timeStr":@"2018-10-05"}
-                         ,
-                         
-                         @{@"content":@"我送你是是是宿送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是送你是是是宿舍是是是舍是是是",
-                           @"from_uname":@"大炮",
-                           @"from_uid":@1,
-                           @"timeStr":@"2018-10-05"}
-                         
-                         ];
-        _commentDataArr = [NSMutableArray arrayWithArray:([XPCommentModel mj_objectArrayWithKeyValuesArray:arr])];
-    }
-    return _commentDataArr;
-}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"全部评论";
-
+    UIBarButtonItem *commentBtn = [[UIBarButtonItem alloc]initWithTitle:@"添加评论" style:UIBarButtonItemStylePlain target:self action:@selector(commentBtnClick)];
+    self.navigationItem.rightBarButtonItem = commentBtn;
     [self setTableView];
     [self addReplyView];
     [self addNavView];
@@ -98,6 +43,10 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
+}
+
+- (void)commentBtnClick{
+    [self.commentTextF becomeFirstResponder];
 }
 
 - (void)keyboardWillShow:(NSNotification *)noti{
@@ -114,6 +63,7 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
 
 - (void)dealloc
 {
+    NSLog(@"%s",__func__);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -162,10 +112,13 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
     [replyView addSubview:commentTextF];
     [replyView addSubview:cancelBtn];
     [self.view addSubview:replyView];
-
+    if (self.isShowTextField){
+        [self.commentTextF becomeFirstResponder];
+    }
 }
 
 - (void)cancelBtnClick:(UIButton *)btn{
+    self.commentTextF.text = @"";
     [self.commentTextF resignFirstResponder];
 }
 
@@ -179,6 +132,8 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
     [tableView registerNib:[UINib nibWithNibName:@"XPDetailCommentInfoTableViewCell" bundle:nil] forCellReuseIdentifier:detailCommentInfoCellID];
     tableView.dataSource = self;
     tableView.delegate = self;
+    tableView.allowsSelection = NO;
+    tableView.tableFooterView = [UIView new];
     self.tableView = tableView;
     [self.view addSubview:tableView];
     
@@ -190,6 +145,7 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     XPDetailCommentInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:detailCommentInfoCellID ];
+    
     cell.delegate = self;
     cell.model = self.commentDataArr[indexPath.row];
     return cell;
@@ -202,10 +158,21 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    __weak typeof(self) weakSelf = self;
+    if (textField.text.length > 0){
+        [[XPNetWorkTool shareTool] insertCommentInfoWithProduct_id:self.product_id WithContent:textField.text andCallBack:^(NSInteger tag) {
+            [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"评论成功"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+            
+            
+        }];
+    }
+    
     [self.commentTextF resignFirstResponder];
     return YES;
 }
-
 
 
 @end

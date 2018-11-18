@@ -15,7 +15,7 @@
     NSArray *modelArr = [XPCommentModel mj_objectArrayWithKeyValuesArray:self.subModel];
     if (self.subModel.count>0){
         for (XPCommentModel *model in modelArr) {
-            NSMutableString *str =[ NSMutableString stringWithFormat:@"%@:%@",model.from_uname,model.content];
+            NSMutableString *str =[ NSMutableString stringWithFormat:@"%@:%@",model.user_name,model.content];
             CGFloat cellHeight = [self getHeightWithString:str andFont:[UIFont systemFontOfSize:17] andWidth:XP_SCREEN_WIDTH-50];
             allHeight += cellHeight;
         }

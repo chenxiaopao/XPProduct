@@ -91,10 +91,16 @@
 
 #pragma mark - 协议实现
 -(void)dropMenuView:(DropMenuView *)view didSelectName:(NSString *)str fullAddressName:(NSString *)fullStr{
+    if ([fullStr containsString:str]){
+        NSString *tempStr =  [fullStr substringWithRange:NSMakeRange(0, str.length)];
+        if([tempStr containsString:str]){
+            fullStr = str;
+        }
+    }
     if (![fullStr isEqualToString:@""]){
         self.lastFullStr = fullStr;
     }else{
-    
+        
         fullStr = self.lastFullStr;
     }
     BOOL isRefresh = false;

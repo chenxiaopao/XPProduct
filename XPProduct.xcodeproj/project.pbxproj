@@ -64,6 +64,7 @@
 		486D289A214A2BDE00F98B57 /* XPBaseSearchRecommendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 486D2899214A2BDE00F98B57 /* XPBaseSearchRecommendTableViewCell.m */; };
 		486D289E214AD37300F98B57 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 486D28A0214AD37300F98B57 /* Localizable.strings */; };
 		486D28AD214AE40900F98B57 /* XPInfoListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 486D28AC214AE40900F98B57 /* XPInfoListTableViewController.m */; };
+		488F0319219769A6006F22E0 /* NSString+XPCalculateTimeSt.m in Sources */ = {isa = PBXBuildFile; fileRef = 488F0318219769A6006F22E0 /* NSString+XPCalculateTimeSt.m */; };
 		48A1863C213BDCFA00BC4C4B /* XPGraySearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A1863B213BDCFA00BC4C4B /* XPGraySearchView.m */; };
 		48A1863F213C38E200BC4C4B /* XPInfoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A1863E213C38E200BC4C4B /* XPInfoDetailViewController.m */; };
 		48A18650213FDA9700BC4C4B /* XPNetWorkTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A1864F213FDA9700BC4C4B /* XPNetWorkTool.m */; };
@@ -79,6 +80,15 @@
 		48A1B886216BDB8D00887406 /* XPDetailSubCommentInfoTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A1B885216BDB8D00887406 /* XPDetailSubCommentInfoTableView.m */; };
 		48B7F5032164098D009BA442 /* XPMineBuyOrSaleChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B7F5012164098C009BA442 /* XPMineBuyOrSaleChildViewController.m */; };
 		48B7F5062164129C009BA442 /* XPMineSaleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B7F5052164129C009BA442 /* XPMineSaleDetailViewController.m */; };
+		48BFEB21219DDCD100673FF7 /* XPBuyNoCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB20219DDCD100673FF7 /* XPBuyNoCommentView.m */; };
+		48BFEB2421A052D800673FF7 /* XPMineCommentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB2321A052D800673FF7 /* XPMineCommentTableViewController.m */; };
+		48BFEB2821A0531B00673FF7 /* XPMineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB2621A0531B00673FF7 /* XPMineTableViewCell.m */; };
+		48BFEB2921A0531B00673FF7 /* XPMineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BFEB2721A0531B00673FF7 /* XPMineTableViewCell.xib */; };
+		48BFEB2C21A0697600673FF7 /* XPCommentAndSupplyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB2B21A0697600673FF7 /* XPCommentAndSupplyModel.m */; };
+		48BFEB3021A0997F00673FF7 /* XPNoDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB2E21A0997F00673FF7 /* XPNoDataTableViewCell.m */; };
+		48BFEB3121A0997F00673FF7 /* XPNoDataTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BFEB2F21A0997F00673FF7 /* XPNoDataTableViewCell.xib */; };
+		48C1578F2191B73F00233606 /* XPCollectBrowseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1578E2191B73F00233606 /* XPCollectBrowseModel.m */; };
+		48C1579221954CD300233606 /* XPSupplyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1579121954CD300233606 /* XPSupplyModel.m */; };
 		48C1D9AC21541557008EA1E6 /* XPCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1D9AA21541556008EA1E6 /* XPCategoryView.m */; };
 		48C1D9AF2154159B008EA1E6 /* XPCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1D9AE2154159B008EA1E6 /* XPCategoryViewController.m */; };
 		48C1D9B221542A4F008EA1E6 /* XPScreeningResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1D9B121542A4F008EA1E6 /* XPScreeningResultViewController.m */; };
@@ -228,6 +238,8 @@
 		486D28A1214AD48700F98B57 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		486D28AB214AE40900F98B57 /* XPInfoListTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPInfoListTableViewController.h; sourceTree = "<group>"; };
 		486D28AC214AE40900F98B57 /* XPInfoListTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPInfoListTableViewController.m; sourceTree = "<group>"; };
+		488F0317219769A6006F22E0 /* NSString+XPCalculateTimeSt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+XPCalculateTimeSt.h"; sourceTree = "<group>"; };
+		488F0318219769A6006F22E0 /* NSString+XPCalculateTimeSt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+XPCalculateTimeSt.m"; sourceTree = "<group>"; };
 		48A1863A213BDCFA00BC4C4B /* XPGraySearchView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPGraySearchView.h; sourceTree = "<group>"; };
 		48A1863B213BDCFA00BC4C4B /* XPGraySearchView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPGraySearchView.m; sourceTree = "<group>"; };
 		48A1863D213C38E200BC4C4B /* XPInfoDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPInfoDetailViewController.h; sourceTree = "<group>"; };
@@ -256,6 +268,22 @@
 		48B7F5022164098C009BA442 /* XPMineBuyOrSaleChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPMineBuyOrSaleChildViewController.h; sourceTree = "<group>"; };
 		48B7F5042164129C009BA442 /* XPMineSaleDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPMineSaleDetailViewController.h; sourceTree = "<group>"; };
 		48B7F5052164129C009BA442 /* XPMineSaleDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPMineSaleDetailViewController.m; sourceTree = "<group>"; };
+		48BFEB1F219DDCD100673FF7 /* XPBuyNoCommentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPBuyNoCommentView.h; sourceTree = "<group>"; };
+		48BFEB20219DDCD100673FF7 /* XPBuyNoCommentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPBuyNoCommentView.m; sourceTree = "<group>"; };
+		48BFEB2221A052D800673FF7 /* XPMineCommentTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPMineCommentTableViewController.h; sourceTree = "<group>"; };
+		48BFEB2321A052D800673FF7 /* XPMineCommentTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPMineCommentTableViewController.m; sourceTree = "<group>"; };
+		48BFEB2521A0531B00673FF7 /* XPMineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPMineTableViewCell.h; sourceTree = "<group>"; };
+		48BFEB2621A0531B00673FF7 /* XPMineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPMineTableViewCell.m; sourceTree = "<group>"; };
+		48BFEB2721A0531B00673FF7 /* XPMineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XPMineTableViewCell.xib; sourceTree = "<group>"; };
+		48BFEB2A21A0697600673FF7 /* XPCommentAndSupplyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPCommentAndSupplyModel.h; sourceTree = "<group>"; };
+		48BFEB2B21A0697600673FF7 /* XPCommentAndSupplyModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPCommentAndSupplyModel.m; sourceTree = "<group>"; };
+		48BFEB2D21A0997F00673FF7 /* XPNoDataTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPNoDataTableViewCell.h; sourceTree = "<group>"; };
+		48BFEB2E21A0997F00673FF7 /* XPNoDataTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPNoDataTableViewCell.m; sourceTree = "<group>"; };
+		48BFEB2F21A0997F00673FF7 /* XPNoDataTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XPNoDataTableViewCell.xib; sourceTree = "<group>"; };
+		48C1578D2191B73F00233606 /* XPCollectBrowseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPCollectBrowseModel.h; sourceTree = "<group>"; };
+		48C1578E2191B73F00233606 /* XPCollectBrowseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPCollectBrowseModel.m; sourceTree = "<group>"; };
+		48C1579021954CD300233606 /* XPSupplyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPSupplyModel.h; sourceTree = "<group>"; };
+		48C1579121954CD300233606 /* XPSupplyModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPSupplyModel.m; sourceTree = "<group>"; };
 		48C1D9AA21541556008EA1E6 /* XPCategoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPCategoryView.m; sourceTree = "<group>"; };
 		48C1D9AB21541556008EA1E6 /* XPCategoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPCategoryView.h; sourceTree = "<group>"; };
 		48C1D9AD2154159B008EA1E6 /* XPCategoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPCategoryViewController.h; sourceTree = "<group>"; };
@@ -394,6 +422,8 @@
 				483F1345212E93FC00D157D0 /* UIView+XPViewFrame.m */,
 				48C1D9C021555274008EA1E6 /* UIButton+XPAdjustFont.h */,
 				48C1D9C121555274008EA1E6 /* UIButton+XPAdjustFont.m */,
+				488F0317219769A6006F22E0 /* NSString+XPCalculateTimeSt.h */,
+				488F0318219769A6006F22E0 /* NSString+XPCalculateTimeSt.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -539,6 +569,8 @@
 				48A1B87E216BCA9200887406 /* XPDetailSubCommentInfoTableViewCell.xib */,
 				48A1B884216BDB8D00887406 /* XPDetailSubCommentInfoTableView.h */,
 				48A1B885216BDB8D00887406 /* XPDetailSubCommentInfoTableView.m */,
+				48BFEB1F219DDCD100673FF7 /* XPBuyNoCommentView.h */,
+				48BFEB20219DDCD100673FF7 /* XPBuyNoCommentView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -627,6 +659,8 @@
 				48A1B86C216A25B500887406 /* XPMineBuyDetailViewController.m */,
 				48A1B86E216A293D00887406 /* XPMineUserCardViewController.h */,
 				48A1B86F216A293D00887406 /* XPMineUserCardViewController.m */,
+				48BFEB2221A052D800673FF7 /* XPMineCommentTableViewController.h */,
+				48BFEB2321A052D800673FF7 /* XPMineCommentTableViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -638,6 +672,10 @@
 				483F1336212E76CC00D157D0 /* XPMineModel.m */,
 				48187AB3216F73D400F20BFD /* XPUserModel.h */,
 				48187AB4216F73D400F20BFD /* XPUserModel.m */,
+				48C1578D2191B73F00233606 /* XPCollectBrowseModel.h */,
+				48C1578E2191B73F00233606 /* XPCollectBrowseModel.m */,
+				48BFEB2A21A0697600673FF7 /* XPCommentAndSupplyModel.h */,
+				48BFEB2B21A0697600673FF7 /* XPCommentAndSupplyModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -660,6 +698,9 @@
 				4858F8712160E55800675790 /* XPPageView.m */,
 				48187AC3217068C400F20BFD /* XPReplyView.h */,
 				48187AC4217068C400F20BFD /* XPReplyView.m */,
+				48BFEB2521A0531B00673FF7 /* XPMineTableViewCell.h */,
+				48BFEB2621A0531B00673FF7 /* XPMineTableViewCell.m */,
+				48BFEB2721A0531B00673FF7 /* XPMineTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -710,6 +751,8 @@
 		48D38421212C7776002634B3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				48C1579021954CD300233606 /* XPSupplyModel.h */,
+				48C1579121954CD300233606 /* XPSupplyModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -789,6 +832,9 @@
 				48C1D9AA21541556008EA1E6 /* XPCategoryView.m */,
 				485AF2F4214F5E4700557190 /* XPBaseCategoryRightCell.h */,
 				485AF2F5214F5E4700557190 /* XPBaseCategoryRightCell.m */,
+				48BFEB2D21A0997F00673FF7 /* XPNoDataTableViewCell.h */,
+				48BFEB2E21A0997F00673FF7 /* XPNoDataTableViewCell.m */,
+				48BFEB2F21A0997F00673FF7 /* XPNoDataTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -890,11 +936,13 @@
 				483F1340212E7BE600D157D0 /* XPMineModelData.plist in Resources */,
 				486D287B2146F60100F98B57 /* XPBuyCategoryData.plist in Resources */,
 				4837E5C52183CB560053FAE4 /* productCategoryContainAll.plist in Resources */,
+				48BFEB3121A0997F00673FF7 /* XPNoDataTableViewCell.xib in Resources */,
 				4858F865215F483400675790 /* XPSaleDetailUserTableViewCell.xib in Resources */,
 				4858F86F215FDA0500675790 /* XPMineMiddleCollectionViewCell.xib in Resources */,
 				48D6F9B72158BFEB000C2914 /* XPBuyInfoTableViewCell.xib in Resources */,
 				48A1B880216BCA9200887406 /* XPDetailSubCommentInfoTableViewCell.xib in Resources */,
 				486D289721497FE500F98B57 /* XPSearchHistorySectionHeadView.xib in Resources */,
+				48BFEB2921A0531B00673FF7 /* XPMineTableViewCell.xib in Resources */,
 				48187AB7216F79C700F20BFD /* XPMineUserDetailData.plist in Resources */,
 				48D6F9C1215A9DA5000C2914 /* XPBuyPublishTableViewCell.xib in Resources */,
 				48E535CE21688F8800FF3349 /* XPBuyDetailCommentInfoTableViewCell.xib in Resources */,
@@ -965,13 +1013,17 @@
 				483F1343212E801600D157D0 /* UIImage+XPOriginImage.m in Sources */,
 				486D28AD214AE40900F98B57 /* XPInfoListTableViewController.m in Sources */,
 				483F134F212ED54B00D157D0 /* XPMineSettingTableViewController.m in Sources */,
+				48BFEB21219DDCD100673FF7 /* XPBuyNoCommentView.m in Sources */,
 				486D28892146FF7000F98B57 /* XPBuyCategoryModel.m in Sources */,
 				4858F86E215FDA0500675790 /* XPMineMiddleCollectionViewCell.m in Sources */,
 				48D6F9EE215E0B27000C2914 /* XPSalePublishImageCell.m in Sources */,
 				486D288C21491A2C00F98B57 /* XPBaseSearchHIstoryTableViewCell.m in Sources */,
+				48C1579221954CD300233606 /* XPSupplyModel.m in Sources */,
 				48B7F5062164129C009BA442 /* XPMineSaleDetailViewController.m in Sources */,
 				48D3842F212C7975002634B3 /* XPTabBarController.m in Sources */,
+				48BFEB2C21A0697600673FF7 /* XPCommentAndSupplyModel.m in Sources */,
 				48E535C6216865E700FF3349 /* XPBuyDetailUserInfoTableViewCell.m in Sources */,
+				48C1578F2191B73F00233606 /* XPCollectBrowseModel.m in Sources */,
 				48C1D9BE2154CF35008EA1E6 /* DropMenuView.m in Sources */,
 				483F136521307E3F00D157D0 /* XPLoginViewController.m in Sources */,
 				48D6F9DA215CB8A1000C2914 /* XPSaleInfoTableViewCell.m in Sources */,
@@ -984,12 +1036,14 @@
 				48C1D9B221542A4F008EA1E6 /* XPScreeningResultViewController.m in Sources */,
 				48E535BA2167A35D00FF3349 /* XPBuyDetailHeadView.m in Sources */,
 				4858F8722160E55800675790 /* XPPageView.m in Sources */,
+				48BFEB2821A0531B00673FF7 /* XPMineTableViewCell.m in Sources */,
 				4805E80C21821BC90089B75B /* XPPurchaseModel.m in Sources */,
 				48C1D9C5215558C8008EA1E6 /* XPDropCell.m in Sources */,
 				48E535CD21688F8800FF3349 /* XPBuyDetailCommentInfoTableViewCell.m in Sources */,
 				48D38432212C7D8D002634B3 /* XPNavigationViewController.m in Sources */,
 				48A1B87F216BCA9200887406 /* XPDetailSubCommentInfoTableViewCell.m in Sources */,
 				486D289521497FB600F98B57 /* XPSearchHistorySectionHeadView.m in Sources */,
+				48BFEB2421A052D800673FF7 /* XPMineCommentTableViewController.m in Sources */,
 				486D289A214A2BDE00F98B57 /* XPBaseSearchRecommendTableViewCell.m in Sources */,
 				483F135B212F436D00D157D0 /* XPClearCacheTool.m in Sources */,
 				486D286E2145CB5F00F98B57 /* XPWeakProxy.m in Sources */,
@@ -1025,6 +1079,7 @@
 				48C1D9AC21541557008EA1E6 /* XPCategoryView.m in Sources */,
 				4831B231214055B200E95426 /* XPInfoDetailModel.m in Sources */,
 				48E535C02167E1F900FF3349 /* XPBuyDetailProductInfoTableViewCell.m in Sources */,
+				48BFEB3021A0997F00673FF7 /* XPNoDataTableViewCell.m in Sources */,
 				4858F8752160F14100675790 /* XPCollectViewController.m in Sources */,
 				48A1B877216B20EB00887406 /* XPDetailCommentInfoTableViewCell.m in Sources */,
 				4831B2342140560600E95426 /* XPImageModel.m in Sources */,
@@ -1037,6 +1092,7 @@
 				48D38427212C7776002634B3 /* main.m in Sources */,
 				4858F864215F483400675790 /* XPSaleDetailUserTableViewCell.m in Sources */,
 				483F1337212E76CC00D157D0 /* XPMineModel.m in Sources */,
+				488F0319219769A6006F22E0 /* NSString+XPCalculateTimeSt.m in Sources */,
 				48C1D9C221555274008EA1E6 /* UIButton+XPAdjustFont.m in Sources */,
 				48187AB5216F73D400F20BFD /* XPUserModel.m in Sources */,
 				483F1355212ED67800D157D0 /* XPMineFeedbackViewController.m in Sources */,

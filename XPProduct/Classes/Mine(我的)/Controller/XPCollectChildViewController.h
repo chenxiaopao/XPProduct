@@ -10,5 +10,4 @@
 #import "XPConst.h"
 #import "XPBaseCollectChildViewController.h"
 @interface XPCollectChildViewController:XPBaseCollectChildViewController
-//@property (nonatomic,assign) XPMineItemType type;
 @end

@@ -7,13 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WebKit/WebKit.h>
-#import "XPNetWorkTool.h"
-#import "XPImageModel.h"
-#import "XPInfoDetailModel.h"
-#import "MJExtension.h"
-#import "WebViewJavascriptBridge.h"
-#import "SDWebImageManager.h"
+
 @interface XPInfoDetailViewController : UIViewController
 
 @end

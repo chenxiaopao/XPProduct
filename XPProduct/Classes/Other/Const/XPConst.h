@@ -13,10 +13,11 @@ static const int recommendLabelTag = 1000;
 static const int historyLabelTag = 2000;
 static NSString * const CAPTCHA_URL = @"https://sapi.k780.com/?";
 static NSString * removoTimerNotification = @"removoTimerNotification";
-static NSString * const BASE_URL =@"http://192.168.31.85:8080/product/";
+static NSString * const BASE_URL =@"http://192.168.0.100:8080/product/";
+
 typedef NS_ENUM(NSInteger,XPMineItemType){
-    XPMineItemTypeCollect,
-    XPMineItemTypeHistory
+    XPMineItemTypeCollect=1,
+    XPMineItemTypeHistory=0
 };
 
 typedef NS_ENUM(NSInteger,XPMineBuyOrSaleCellType){

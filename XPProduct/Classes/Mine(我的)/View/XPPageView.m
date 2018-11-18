@@ -51,6 +51,8 @@ static NSString *const contentID = @"contentID";
     
     layout.itemSize = CGSizeMake(self.width, self.height-self.titleView.height);
     UICollectionView *collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, self.titleView.height, self.width, self.height-self.titleView.height) collectionViewLayout:layout];
+    
+    NSLog(@"%@",NSStringFromCGRect(collectionView.frame));
     if (!self.canScroll){
         collectionView.scrollEnabled = NO;
     }

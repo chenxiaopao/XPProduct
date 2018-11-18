@@ -11,4 +11,5 @@
 @interface XPAlertTool : NSObject
 + (void)showAlertWithSupeView:(UIView *)view andText:(NSString *)text;
 + (void)showLoginViewControllerWithVc:(UIViewController *)vc orOtherVc:(UIViewController *)otherVc  andSelectedIndex:(NSInteger )index;
++ (void)callToUserWithPhone:(NSString *)phone toView:(UIView *)view;
 @end

@@ -33,7 +33,7 @@
                     <color key="textColor" red="1" green="0.47174598130000001" blue="0.065650822070000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="元/斤" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqb-q8-COq">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="元/斤" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oqb-q8-COq" userLabel="元">
                     <rect key="frame" x="100.5" y="74.5" width="35.5" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="1" green="0.47174598130000001" blue="0.065650822070000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -81,6 +81,16 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vFu-os-L28">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
+                    <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="cEw-5E-0kf"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -102,13 +112,26 @@
                 <constraint firstItem="Kqu-oy-rWQ" firstAttribute="centerY" secondItem="y97-bj-xV2" secondAttribute="centerY" id="d2f-2b-YRc"/>
                 <constraint firstItem="y97-bj-xV2" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="dT1-gc-a8i"/>
                 <constraint firstItem="OLF-88-KSB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="30" id="f1Z-VD-7No"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vFu-os-L28" secondAttribute="trailing" id="kJ2-Xb-bAY"/>
+                <constraint firstItem="vFu-os-L28" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="r6v-8W-fS4"/>
                 <constraint firstItem="a3U-9x-Uo4" firstAttribute="leading" secondItem="fNj-k7-cbW" secondAttribute="trailing" constant="10" id="sSq-7q-JYx"/>
                 <constraint firstItem="lGA-fa-pWK" firstAttribute="leading" secondItem="y97-bj-xV2" secondAttribute="leading" id="t9s-rA-0GP"/>
                 <constraint firstItem="lGA-fa-pWK" firstAttribute="top" secondItem="fNj-k7-cbW" secondAttribute="bottom" constant="20" id="yJu-fg-JrT"/>
+                <constraint firstItem="vFu-os-L28" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="zIn-Zz-fVc"/>
                 <constraint firstItem="OLF-88-KSB" firstAttribute="top" secondItem="y97-bj-xV2" secondAttribute="bottom" constant="10" id="zMB-gT-gQG"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="addressLabel" destination="fNj-k7-cbW" id="iB2-qR-h68"/>
+                <outlet property="countLabel" destination="Bna-pH-Yof" id="nQy-WA-JQS"/>
+                <outlet property="descriptionLabel" destination="fYC-sN-Hwx" id="1BV-nx-gu4"/>
+                <outlet property="nameLabel" destination="y97-bj-xV2" id="cMs-xC-cpl"/>
+                <outlet property="priceLabel" destination="OLF-88-KSB" id="ssf-oL-iAX"/>
+                <outlet property="publishTimeLabel" destination="a3U-9x-Uo4" id="aEq-gD-Y5t"/>
+                <outlet property="saleTimeLabel" destination="y9U-XT-sSd" id="xQD-fz-Nrn"/>
+                <outlet property="standardLabel" destination="Kqu-oy-rWQ" id="8ym-z6-3LP"/>
+            </connections>
             <point key="canvasLocation" x="53" y="-150.5"/>
         </view>
     </objects>

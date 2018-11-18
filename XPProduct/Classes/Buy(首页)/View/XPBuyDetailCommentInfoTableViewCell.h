@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class XPCommentModel;
 @interface XPBuyDetailCommentInfoTableViewCell : UITableViewCell
-
+@property (nonatomic,strong) XPCommentModel *model;
 @end

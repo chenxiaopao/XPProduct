@@ -17,6 +17,7 @@
 #import "MJExtension.h"
 #import "XPPurchaseModel.h"
 #import "XPAlertTool.h"
+#import "XPSupplyModel.h"
 @interface XPMineBuyOrSaleChildViewController () <UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic,weak) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
@@ -27,13 +28,14 @@ static NSString *const mineSaleCellID = @"mineSaleCellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshData" object:nil];
     [self setTableView];
     [self setRefreshView];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshData" object:nil];
+    
     
 }
 
@@ -43,6 +45,27 @@ static NSString *const mineSaleCellID = @"mineSaleCellID";
     
 }
 
+- (void)loadSupplyInfoWithState:(NSString *)state andUser_ID:(NSString *)user_id{
+    __weak typeof(self) weakSelf = self;
+    [XPSupplyModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{
+                 @"_id":@"id"
+                 };
+    }];
+    [[XPNetWorkTool shareTool]loadSupplyInfoWithId:0 User_id:user_id andState:state andCallBack: ^(NSArray *modelArr,NSError *error) {
+        if (error == nil){
+            if (modelArr.count>0){
+                weakSelf.dataArr =  [XPSupplyModel mj_objectArrayWithKeyValuesArray:modelArr];
+                [weakSelf.tableView reloadData];
+            }else{
+                weakSelf.dataArr = nil;
+                [weakSelf.tableView reloadData];
+                [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"没有您要找的数据o(╥﹏╥)o"];
+            }
+        }
+        
+    }];
+}
 
 
 
@@ -54,69 +77,36 @@ static NSString *const mineSaleCellID = @"mineSaleCellID";
                  };
     }];
     [[XPNetWorkTool shareTool] loadPurchaseInfoWithUser_id:user_id andState:state andName:nil CallBack:^(NSArray *modelArr, NSError *error) {
-        if (error != nil){
+        if (error == nil){
             if (modelArr.count>0){
                 weakSelf.dataArr =  [XPPurchaseModel mj_objectArrayWithKeyValuesArray:modelArr];
-                //            weakSelf.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
                 [weakSelf.tableView reloadData];
             }else{
-                [XPAlertTool showAlertWithSupeView:self.view andText:@"没有您要找的数据o(╥﹏╥)o"];
-                //            weakSelf.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-                //            [weakSelf.tableView reloadData];
+                weakSelf.dataArr = nil;
+                [weakSelf.tableView reloadData];
+                [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"没有您要找的数据o(╥﹏╥)o"];
+                
             }
+            
         }
    
     }];
 }
 
 - (void)refreshData{
+    NSString *state = [NSString stringWithFormat:@"%ld",(long)self.type];
+    NSString *user_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
     if (self.isBuy){
-        
-        NSString *state = [NSString stringWithFormat:@"%ld",(long)self.type];
-        NSString *user_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
-        switch (self.type) {
-               
-            case XPMineBuyOrSaleCellTypeActive:
-            {
-                [self loadPurchaseInfoWithState:state andUser_ID:user_id];
-            }
-                break;
-            case XPMineBuyOrSaleCellTypeInactive:
-            {
-                [self loadPurchaseInfoWithState:state andUser_ID:user_id];
-            }
-                break;
-            case XPMineBuyOrSaleCellTypeDisabled:
-            {
-
-                [self loadPurchaseInfoWithState:state andUser_ID:user_id];
-            }
-                break;
-        }
+        [self loadPurchaseInfoWithState:state andUser_ID:user_id];
     }else{
-        switch (self.type) {
-            case XPMineBuyOrSaleCellTypeActive:
-            {
-                self.dataArr = [NSMutableArray arrayWithArray:@[@"1",@"1"]];
-            }
-                break;
-            case XPMineBuyOrSaleCellTypeInactive:
-            {
-                self.dataArr = [NSMutableArray arrayWithArray:@[@"1",@"1",@"1"]];
-            }
-                break;
-            case XPMineBuyOrSaleCellTypeDisabled:
-            {
-                self.dataArr = [NSMutableArray arrayWithArray:@[@"1",@"1",@"1",@"1"]];
-            }
-                break;
-        }
+        [self loadSupplyInfoWithState:state andUser_ID:user_id];
     }
      [self.tableView.mj_header endRefreshing];
 }
 
 - (void)setTableView{
-    UITableView *tableView =  [[UITableView alloc]initWithFrame:self.view.bounds];
+     CGRect frame = CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_NavBar_Height)-50);
+    UITableView *tableView =  [[UITableView alloc]initWithFrame:frame];
     tableView.delegate = self;
     tableView.dataSource = self;
     if (self.isBuy){
@@ -149,6 +139,7 @@ static NSString *const mineSaleCellID = @"mineSaleCellID";
     }else{
         XPBuyInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:mineBuyCellID forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.model = self.dataArr[indexPath.row];
         return cell;
         
     }
@@ -158,11 +149,12 @@ static NSString *const mineSaleCellID = @"mineSaleCellID";
     if (self.isBuy){//是采购
      
         XPMineSaleDetailViewController *vc = [[XPMineSaleDetailViewController alloc]initWithModel:self.dataArr[indexPath.row]];
+        
         vc.type =  self.type;
         [self.navigationController pushViewController:vc animated:YES];
     }else{
-        XPMineBuyDetailViewController *vc = [[XPMineBuyDetailViewController alloc]init];
-        vc.notCanSelected = YES;
+        XPMineBuyDetailViewController *vc = [[XPMineBuyDetailViewController alloc]initWithhSupplyModel:self.dataArr[indexPath.row]];
+        
         vc.type =  self.type;
         [self.navigationController pushViewController:vc animated:YES];
 

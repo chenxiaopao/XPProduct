@@ -56,9 +56,11 @@ static int const bottomBtnTag = 3000;
         }else{
             hud.label.text = [NSString stringWithFormat:@"%@失败",title];
         }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshData" object:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [hud removeFromSuperview];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshData" object:nil ];
+            
             [self.navigationController popViewControllerAnimated:YES];
             
         });
@@ -93,7 +95,4 @@ static int const bottomBtnTag = 3000;
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"2");
-}
 @end

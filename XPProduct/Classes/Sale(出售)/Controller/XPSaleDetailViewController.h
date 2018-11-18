@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class XPPurchaseModel;
 @interface XPSaleDetailViewController : UIViewController
+
 @property (nonatomic,strong) XPPurchaseModel *purchaseModel;
 - (instancetype)initWithModel:(XPPurchaseModel *)purchaseModel;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;

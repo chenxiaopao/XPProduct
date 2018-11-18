@@ -12,6 +12,7 @@
 @property (nonatomic,assign) BOOL isBuy;
 @property (nonatomic,weak) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *dataArr;
+
 @property (nonatomic,assign) XPMineItemType type;
-- (void)getData;
+- (void)refreshData;
 @end

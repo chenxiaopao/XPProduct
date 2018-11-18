@@ -35,7 +35,10 @@ int totalTime = 60;
     [self.phoneTextField resignFirstResponder];
     [self.autoCodeTextField resignFirstResponder];
     XPTabBarController *tabBarVC = [XPTabBarController new];
-    tabBarVC.selectedIndex = 0;
+    if (self.seletedIndex == 3){
+        self.seletedIndex = 0;
+    }
+    tabBarVC.selectedIndex = self.seletedIndex;
     self.view.window.rootViewController = tabBarVC;
     
 }
@@ -140,8 +143,8 @@ int totalTime = 60;
     [defaults setBool:YES forKey:@"isLogin"];
     [defaults setObject:phoneNumber forKey:@"phone"];
     [defaults setObject:@"用户名" forKey:@"userName"];
-//    UIImage *image = [UIImage imageNamed:@"avatar_user"];
-//    [UIImage saveImageWithImage:image andName:@"avatar"];
+    UIImage *image = [UIImage imageNamed:@"avatar_user"];
+    [UIImage saveImageWithImage:image andName:@"avatar"];
     [defaults synchronize];
     __weak typeof(self) weakSelf = self;
     [[XPNetWorkTool shareTool] loadUserInfoWithFullParam:YES andIsAvatar:NO CallBack:^{
@@ -162,8 +165,9 @@ int totalTime = 60;
 
 -(void)addTopView{
     UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    UIImage *image = [UIImage imageNamed:@"icon_close"];
-    UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    UIImage *image = [UIImage imageNamed:@"icon_close"];
+//    UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *newImage = [UIImage xp_originImageNamed:@"icon_close"];
     [closeBtn setImage:newImage forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(closeBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [closeBtn sizeToFit];

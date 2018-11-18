@@ -127,9 +127,6 @@ static NSString *const categoryLeftCellID = @"categoryLeftCellID";
     if (tableView.tag == 10000){
         return [UIView new];
     }else{
-//        if (section == 0){
-//            return [[UIView alloc]init];
-//        }
         UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 60)];
         bgView.backgroundColor=[UIColor whiteColor];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.width-10, 60)];

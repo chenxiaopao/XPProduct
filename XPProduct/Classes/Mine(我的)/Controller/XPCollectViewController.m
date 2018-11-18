@@ -39,17 +39,18 @@
 
 
 - (void)setInitUI{
-    NSArray *titleArr;
+    NSArray *titleArr = @[@"采购",@"供应"];
+    BOOL isScroll;
     switch (self.type) {
-        case 0:
-        {
-            titleArr = @[@"采购",@"供应"];
-            self.title = @"我的收藏";
-        }
-            break;
         case 1:
         {
-            titleArr = @[@"采购",@"供应"];
+            self.title = @"我的收藏";
+            isScroll = NO;
+        }
+            break;
+        case 0:
+        {
+            isScroll = NO;
             self.title = @"浏览历史";
         }
             break;
@@ -65,7 +66,8 @@
     Vc2.view.backgroundColor = [UIColor greenColor];
     Vc2.type = self.type;
     NSArray *childVcs = @[Vc1,Vc2];
-    XPPageView *pageView = [[XPPageView alloc]initWithFrame:CGRectMake(0, XP_NavBar_Height, XP_SCREEN_WIDTH, height) titleArr:titleArr childVcs:childVcs parentVc:self contentViewCanScroll:NO];
+    
+    XPPageView *pageView = [[XPPageView alloc]initWithFrame:CGRectMake(0, XP_NavBar_Height, XP_SCREEN_WIDTH, height) titleArr:titleArr childVcs:childVcs parentVc:self contentViewCanScroll:isScroll];
     [self.view addSubview:pageView];
     
 }

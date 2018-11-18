@@ -20,7 +20,6 @@
 }
 
 + (void)showLoginViewControllerWithVc:(UIViewController *)vc orOtherVc:(UIViewController *)otherVc andSelectedIndex:(NSInteger )index{
-    
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"isLogin"]){
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:vc.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -29,13 +28,19 @@
             XPLoginViewController *login = [[XPLoginViewController alloc]init];
             login.destVc = otherVc;
             login.seletedIndex = index;
-            
             [vc presentViewController:login animated:YES completion:nil];
-            
         });
     }else{
+        
         [vc.navigationController pushViewController:otherVc animated:YES];
+        
     }
 }
 
++ (void)callToUserWithPhone:(NSString *)phone toView:(UIView *)view{
+    NSMutableString *str = [[NSMutableString alloc]initWithFormat:@"tel:%@",phone];
+    UIWebView *webView = [[UIWebView alloc]init];
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+    [view addSubview:webView];
+}
 @end

@@ -72,8 +72,8 @@ static NSString *const BuyImageCellID = @"BuyImageCellID";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     XPBuyDetailHeadViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:BuyImageCellID forIndexPath:indexPath];
-//    cell.imageView sd_setImageWithURL:<#(nullable NSURL *)#>
-    cell.imageView.image = [UIImage imageNamed:self.imageArr[indexPath.item]];
+    [cell.imageView sd_setImageWithURL:self.imageArr[indexPath.row]];
+//    cell.imageView.image = [UIImage imageNamed:self.imageArr[indexPath.item]];
     
     return cell;
     

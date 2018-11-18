@@ -19,24 +19,24 @@
         setupWebViewJavascriptBridge(function(bridge) {
                                      
                                      /* Init your app here */
-                                     bridge.registerHandler('showImage',function(data,responseCallback){
-                                                            if (data.match("replaceImage")){
-                                                            var  index = data.indexOf(",")
-                                                            var dataReplace=data.substring(0,index)
-                                                            var dataPath = data.substring(index+1)
-                                                            dataReplace=dataReplace.replace("replaceImage","")
-                                                            element=document.getElementById(dataReplace)
-                                                            if(element.src.match("loading")){
-                                                            element.src="file://"+dataPath
-                                                            }
-                                                            }
-                                                            if(responseCallback){
-                                                            responseCallback(element.src)
-                                                            }
-                                                            })
+                 bridge.registerHandler('showImage',function(data,responseCallback){
+                            if (data.match("replaceImage")){
+                            var  index = data.indexOf(",")
+                            var dataReplace=data.substring(0,index)
+                            var dataPath = data.substring(index+1)
+                            dataReplace=dataReplace.replace("replaceImage","")
+                            element=document.getElementById(dataReplace)
+                            if(element.src.match("loading")){
+                            element.src="file://"+dataPath
+                            }
+                            }
+                            if(responseCallback){
+                            responseCallback(element.src)
+                            }
+                            })
+     
                                      
-                                     
-                                     })
+                     })
                                      
             </script>
         <p>news</p>

@@ -20,7 +20,9 @@
 #import "MJExtension.h"
 #import "XPPurchaseModel.h"
 #import "XPAlertTool.h"
+#import "XPSupplyModel.h"
 #import "XPSaleDetailViewController.h"
+#import "XPBuyDetailViewController.h"
 @interface XPScreeningResultViewController () <XPCategoryViewDelagete,MenuScreeningViewDelegate,UITableViewDelegate,UITableViewDataSource,XPGraySearchViewDelegate>
 @property (nonatomic,weak) XPCategoryView *categoryView;
 @property (nonatomic,weak) UIButton *categoryBtn;
@@ -44,6 +46,8 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     }
     return _requestData;
 }
+
+
 - (NSDictionary *)categoryData{
     if (_categoryData == nil){
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategory" ofType:@"plist"];
@@ -52,6 +56,7 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     }
     return _categoryData;
 }
+
 - (XPCategoryView *)categoryView{
     if (_categoryView == nil){
         
@@ -91,17 +96,8 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 - (void)setRefreshView{
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(pullDownRefreshData)];
     self.tableView.mj_header = header;
-    
-    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullUpRefreshData)];
-    self.tableView.mj_footer = footer;
 }
 
-- (void)pullUpRefreshData{
-    NSLog(@"上拉刷新");
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView.mj_footer endRefreshing];
-    });
-}
 
 - (void)pullDownRefreshData{
     NSString *name = [self.requestData objectForKey:@"category"];
@@ -109,23 +105,42 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     NSString *sort = [self.requestData objectForKey:@"sort"];
     NSLog(@"%@,%@,%@",name,address,sort);
     __weak typeof(self) weakSelf = self;
+    if (self.isSale){
+        [XPPurchaseModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+            return @{
+                     @"_id":@"id"
+                     };
+        }];
+        
+        [[XPNetWorkTool shareTool] searchPurchaseInfoWithName:name andAddress:address andSort:sort andCallBack:^(NSArray *modelArr) {
+            if (modelArr.count > 0){
+                weakSelf.dataArr = [XPPurchaseModel mj_objectArrayWithKeyValuesArray:modelArr];
+            }else{
+                weakSelf.dataArr  = modelArr;
+                [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"没有更多数据啦"];
+            }
+            [weakSelf.tableView.mj_header endRefreshing];
+            [self.tableView reloadData];
+        }];
+    }else{
+        [XPSupplyModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+            return @{
+                     @"_id":@"id"
+                     };
+        }];
+        
+        [[XPNetWorkTool shareTool] searchSupplyInfoWithName:name andAddress:address andSort:sort andCallBack:^(NSArray *modelArr) {
+            if (modelArr.count > 0){
+                weakSelf.dataArr = [XPSupplyModel mj_objectArrayWithKeyValuesArray:modelArr];
+            }else{
+                weakSelf.dataArr  = modelArr;
+                [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"没有更多数据啦"];
+            }
+            [weakSelf.tableView.mj_header endRefreshing];
+            [self.tableView reloadData];
+        }];
+    }
     
-    [XPPurchaseModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
-        return @{
-                 @"_id":@"id"
-                 };
-    }];
-    
-    [[XPNetWorkTool shareTool] searchPurchaseInfoWithName:name andAddress:address andSort:sort andCallBack:^(NSArray *modelArr) {
-        if (modelArr.count > 0){
-            weakSelf.dataArr = [XPPurchaseModel mj_objectArrayWithKeyValuesArray:modelArr];
-        }else{
-            weakSelf.dataArr  = modelArr;
-            [XPAlertTool showAlertWithSupeView:weakSelf.view andText:@"没有更多数据啦"];
-        }
-        [weakSelf.tableView.mj_header endRefreshing];
-        [self.tableView reloadData];
-    }];
 }
 
 - (void)setTableView{
@@ -289,10 +304,11 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 #pragma mark - UITableViewDataSource UITableViewDeleagte
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (self.isSale){
-        return self.dataArr.count;
-    }
-    return 3;
+//    if (self.isSale){
+//        return self.dataArr.count;
+//    }
+//    return 3;
+    return self.dataArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -302,6 +318,7 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
         return cell;
     }else{
         XPBuyInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:XPBuyInfoTableViewCellID forIndexPath:indexPath];
+        cell.model = self.dataArr[indexPath.row];
         return cell;
     }
     
@@ -315,8 +332,14 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    XPSaleDetailViewController *vc = [[XPSaleDetailViewController alloc]initWithModel:self.dataArr[indexPath.row]];
-    [self.navigationController pushViewController:vc animated:NO];
+    if (self.isSale){
+        XPSaleDetailViewController *vc = [[XPSaleDetailViewController alloc]initWithModel:self.dataArr[indexPath.row]];
+        [self.navigationController pushViewController:vc animated:NO];
+    }else{
+        XPBuyDetailViewController *buy = [[XPBuyDetailViewController alloc]initWithhSupplyModel:self.dataArr[indexPath.row]];
+        [self.navigationController pushViewController:buy animated:YES];
+    }
+    
 }
 
 #pragma mark - XPGraySearchViewDelegate

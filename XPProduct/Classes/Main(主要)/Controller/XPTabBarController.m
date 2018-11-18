@@ -15,7 +15,6 @@
 #import "UIImage+XPOriginImage.h"
 #import "XPMineNavigationViewController.h"
 #import "XPLoginViewController.h"
-
 @interface XPTabBarController () <UITabBarControllerDelegate>
 
 @end
@@ -33,6 +32,7 @@
 
 - (void)setUpAllChildVcs{
     XPBuyViewController *buy = [[XPBuyViewController alloc]init];
+    
     [self setUpChildVc:buy itemImage:[UIImage imageNamed:@"icon_findGoods_unSelect"] itemSelectedImage:[UIImage xp_originImageNamed:@"icon_findGoods_selected"] itemTitle:@"我要买"];
     
     XPSaleViewController *sale = [[XPSaleViewController alloc]init];
@@ -51,10 +51,11 @@
     [self setUpChildVc:mine itemImage:[UIImage imageNamed:@"icon_me_unSelect"] itemSelectedImage:[UIImage xp_originImageNamed:@"icon_me_selected"] itemTitle:@"我的"];
 }
 - (void)setUpChildVc:(UIViewController *)vc itemImage:(UIImage *)image itemSelectedImage:(UIImage*)selectedImage itemTitle:(NSString *)title{
-//    XPNavigationViewController *nav = [[XPNavigationViewController alloc]init];
+//    DragerViewController *drag = [[DragerViewController alloc]init];
+//    [drag.middleView addSubview:vc.view];
+//    [drag addChildViewController:vc];
     if ([vc isKindOfClass:[XPMineViewController class] ]){
         XPNavigationViewController *nav = [[XPMineNavigationViewController alloc]initWithRootViewController:vc];
-//        nav = mineNav;
         nav.tabBarItem.title = title;
         nav.tabBarItem.image = image;
         

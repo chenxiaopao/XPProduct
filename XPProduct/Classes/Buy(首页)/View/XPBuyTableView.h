@@ -22,6 +22,7 @@
 @end
 
 @interface XPBuyTableView : UITableView
+@property (nonatomic,strong) NSArray *supplyArr;
 @property (nonatomic,weak) id<XPBuyTableViewDelegate> buyDelegate;
 - (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style categoryData:(NSArray *)data;
 

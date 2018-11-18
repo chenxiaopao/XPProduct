@@ -11,6 +11,7 @@
 #import "UIImage+XPOriginImage.h"
 #import "UIView+XPViewFrame.h"
 #import "XPBaseCollectChildViewController.h"
+#import "XPMineBuyOrSaleChildViewController.h"
 @interface XPMineUserCardViewController ()
 
 @end
@@ -46,16 +47,24 @@
     
     
     //bottomView
-    XPBaseCollectChildViewController *Vc1 = [[XPBaseCollectChildViewController alloc]init];
+    NSArray *titleArr = @[@"采购",@"供应"];
+    XPMineBuyOrSaleChildViewController *Vc1 = [[XPMineBuyOrSaleChildViewController alloc]init];
+    XPMineBuyOrSaleChildViewController *Vc2 = [[XPMineBuyOrSaleChildViewController alloc]init];
+ 
+    Vc1.type = XPMineBuyOrSaleCellTypeActive;
     Vc1.isBuy = YES;
     Vc1.view.backgroundColor = [UIColor redColor];
-    XPBaseCollectChildViewController *Vc2 = [[XPBaseCollectChildViewController alloc]init];
+    
+    Vc2.type = XPMineBuyOrSaleCellTypeActive;
+    Vc2.isBuy = NO;
     Vc2.view.backgroundColor = [UIColor greenColor];
+    
     NSArray *childVcs = @[Vc1,Vc2];
-    CGFloat height = XP_SCREEN_HEIGHT - CGRectGetMaxY(label.frame);
-    NSArray *titleArr = @[@"采购",@"供应"];
-    XPPageView *pageView = [[XPPageView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(middleView.frame), XP_SCREEN_WIDTH, height)  titleArr:titleArr childVcs:childVcs parentVc:self contentViewCanScroll:NO];
+   
+    CGFloat height = (XP_SCREEN_HEIGHT) -CGRectGetMaxY(middleView.frame);
+    XPPageView *pageView = [[XPPageView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(middleView.frame), XP_SCREEN_WIDTH, height) titleArr:titleArr childVcs:childVcs parentVc:self contentViewCanScroll:YES];
     [self.view addSubview:pageView];
+    
 }
 
 

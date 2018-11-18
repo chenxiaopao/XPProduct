@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface XPBuyCommentViewController : UIViewController
-
+@property (nonatomic,strong) NSArray *commentDataArr;
+@property (nonatomic,assign) NSInteger product_id;
+@property (nonatomic,assign) BOOL isShowTextField;
 @end

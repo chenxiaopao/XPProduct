@@ -35,13 +35,13 @@ static NSString *const buyPublishCellID = @"buyPublishCellID";
     }
     return _publishModelArr;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"发布收购";
     [self addPublishBtn];
 //    self.tableView.tableFooterView = [[UIView alloc]init];
     [self.tableView registerNib:[UINib nibWithNibName:@"XPBuyPublishTableViewCell" bundle:nil] forCellReuseIdentifier:buyPublishCellID];
-    
  
 }
 
@@ -145,8 +145,11 @@ static NSString *const buyPublishCellID = @"buyPublishCellID";
             cell.block = ^{
                 XPBuyCategoryViewController *vc = [[XPBuyCategoryViewController alloc]init];
                 vc.popBlock = ^(NSArray * arr, NSInteger index) {
+                    
                     weakCell.textField.text = [arr lastObject];
                 };
+                
+                
                 [weakSelf.navigationController pushViewController:vc animated:NO];
             };
             

@@ -28,7 +28,7 @@
 - (void)setModel:(XPCommentModel *)model{
     _model = model;
     self.commentLabel.text = model.content;
-    self.nameLabel.text = model.from_uname;
+    self.nameLabel.text = model.user_name;
     [self setFirstLineIndent];
     NSMutableString *str =[ NSMutableString stringWithFormat:@"%@:%@",self.nameLabel.text,self.commentLabel.text];
     self.commentLabel.height = [self getHeightWithString:str andFont:[UIFont systemFontOfSize:17] andWidth:self.width];

@@ -19,22 +19,36 @@
 #import "XPMineBuyOrSaleViewController.h"
 #import "XPAlertTool.h"
 #import "XPBannerView.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "XPNetWorkTool.h"
+#import "XPSupplyModel.h"
+#import <MJExtension/MJExtension.h>
 @interface XPBuyViewController () <XPSearchViewDelegate,XPBuyTableViewDelegate,XPBannerViewDelegate>
 @property (nonatomic,weak) XPBuyTableView *tableView;
 @property (nonatomic,weak) XPBannerView *bannerView;
 @property (nonatomic,assign) CGFloat bannerViewHeight ;
+@property (nonatomic,strong) NSArray *bannerArr;
 @end
 
 @implementation XPBuyViewController
 
+- (NSArray *)bannerArr{
+    if(_bannerArr==nil){
+        _bannerArr = @[@"菠萝",@"西瓜",@"柚子",@"草莓"];
+    }
+    return _bannerArr;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.bannerViewHeight = 180;
     [self setSearchView];
     [self setTableView];
     [self setBannerView];
-    
+
 }
+
 
 - (void)viewWillDisappear:(BOOL)animated{
     [self.bannerView removeTimer];
@@ -47,14 +61,14 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.translucent = NO;
     [self.bannerView addTimer];
-    
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)setBannerView{
     
     XPBannerView *bannerView = [[XPBannerView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, self.bannerViewHeight)];
     bannerView.backgroundColor = [UIColor redColor];
-    NSArray *imageArr = @[@"boluo",@"nihoutao",@"tudou",@"caomei"];
+    NSArray *imageArr = @[@"boluo",@"xigua",@"youzi",@"caomei"];
     bannerView.imageArr = imageArr;
     bannerView.delegate = self;
     self.bannerView = bannerView;
@@ -66,21 +80,41 @@
     NSArray *categoryArr = [NSArray arrayWithContentsOfFile:path];
 
     XPBuyTableView *tableView = [[XPBuyTableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped categoryData:categoryArr];
+    tableView.autoresizingMask =  UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     tableView.buyDelegate = self;
     tableView.contentInset = UIEdgeInsetsMake(self.bannerViewHeight, 0, 0, 0);
     self.tableView = tableView;
     
-    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
-    tableView.mj_footer = footer;
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    tableView.mj_header = header;
+    [tableView.mj_header beginRefreshing];
     [self.view addSubview:tableView];
  
 }
 
 - (void)loadData{
-    NSLog(@"shuaxin");
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.tableView.mj_footer endRefreshing];
+    //进程间通信
+    __weak typeof(self) weakSelf = self;
+    [XPSupplyModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{
+                 @"_id":@"id"
+                 };
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [[XPNetWorkTool shareTool] loadSupplyInfoWithId:0 User_id:@"0" andState:@"1"  andCallBack:^(id obj,NSError *error) {
+            if (error == nil){
+                 weakSelf.tableView.supplyArr = [XPSupplyModel mj_objectArrayWithKeyValuesArray:obj];
+            }
+            
+        }];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView.mj_header endRefreshing];
+        });
     });
+
+    
 
 }
 
@@ -98,7 +132,10 @@
 
 #pragma mark - XPBannerViewDelegate
 - (void)bannerView:(XPBannerView *)bannerView didSelectedIndex:(NSInteger)index{
-    NSLog(@"index:%ld",(long)index);
+    NSArray *arr = @[self.bannerArr[index]];
+    XPScreeningResultViewController *Vc = [[XPScreeningResultViewController alloc]init];
+    Vc.categoryTitleArr = arr;
+    [self.navigationController pushViewController:Vc animated:YES];
 }
 
 #pragma mark - XPbuyTableViewDelegate
@@ -151,9 +188,9 @@
 }
 
 - (void)buyTableView:(XPBuyTableView *)tableView didSelectedIndexPath:(NSIndexPath *)indexPath{
-    XPBuyDetailViewController *buy = [[XPBuyDetailViewController alloc]init];
+    XPBuyDetailViewController *buy = [[XPBuyDetailViewController alloc]initWithhSupplyModel:tableView.supplyArr[indexPath.row]];
     [self.navigationController pushViewController:buy animated:YES];
-    NSLog(@"货品cell点击");
+    
 }
 
 

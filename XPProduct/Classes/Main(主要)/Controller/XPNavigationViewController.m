@@ -8,7 +8,6 @@
 
 #import "XPNavigationViewController.h"
 
-
 @interface XPNavigationViewController () <UIGestureRecognizerDelegate>
 
 @end
@@ -24,6 +23,8 @@
     UIPanGestureRecognizer *pan =[[UIPanGestureRecognizer alloc]initWithTarget:target action:@selector(handleNavigationTransition:)];
     [self.view addGestureRecognizer:pan];
     pan.delegate = self;
+    
+    
     
 
     

@@ -8,6 +8,7 @@
 
 #import "XPBuyDetailUserInfoTableViewCell.h"
 #import "UIView+XPViewFrame.h"
+#import "XPSupplyModel.h"
 @implementation XPBuyDetailUserInfoTableViewCell
 
 - (void)awakeFromNib{
@@ -17,5 +18,10 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
+- (void)setModel:(XPSupplyModel *)model{
+    _model = model;
+    self.nameLabel.text = model.user_name;
+//    self.avatorView
+}
 
 @end

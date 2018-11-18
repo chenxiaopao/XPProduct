@@ -15,6 +15,8 @@
 #import "XPSalePublishTimeViewController.h"
 #import "XPSalePublishImageCollectionView.h"
 #import "TZImagePickerController.h"
+#import <MBProgressHUD/MBProgressHUD.h>
+#import "XPNetWorkTool.h"
 @interface XPSalePublishViewController () <UITableViewDataSource,UITableViewDelegate,XPBuyPickViewDelegate,XPSalePublishImageCollectionViewDelegate,TZImagePickerControllerDelegate>
 @property (nonatomic,weak) UITableView *tableView;
 @property (nonatomic,strong) NSArray *salePublishData;
@@ -33,12 +35,14 @@ static NSString *salePublishCellID = @"salePublishCellID";
     }
     return _imageArr;
 }
+
 - (NSMutableArray *)assets{
     if(_assets == nil){
         _assets = [NSMutableArray array];
     }
     return _assets;
 }
+
 - (NSArray *)salePublishData{
     if (_salePublishData == nil){
         NSArray *arr = @[
@@ -55,6 +59,7 @@ static NSString *salePublishCellID = @"salePublishCellID";
     }
     return  _salePublishData;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"发布供应";
@@ -77,10 +82,76 @@ static NSString *salePublishCellID = @"salePublishCellID";
 
 - (void)publishBtnClick:(UIButton *)btn{
     
+    BOOL isCanPublish = true;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    __block NSMutableArray *arr = [NSMutableArray array];
+    for (XPBuyPublishTableViewCell *cell in [self.tableView visibleCells]) {
+        if(arr.count<7){
+            if([cell.textField.text  isEqual: @""]) {
+                isCanPublish = false;
+            }else{
+                [arr addObject:cell.textField.text];
+            }
+        }
+        
+    }
+    
+    if (isCanPublish&&arr.count==7&&self.imageArr.count>1){
+        NSArray *images = nil;
+        if(self.imageArr.count>1){
+            images = [self.imageArr subarrayWithRange: NSMakeRange(0, self.imageArr.count-1)];
+        }
+        
+        dispatch_queue_t queue = dispatch_get_global_queue(0, 0 );
+        __weak typeof(self) weakSelf = self;
+        __block NSMutableString *mStr = [NSMutableString string];
+        dispatch_async(queue, ^{
+            for (int i=0; i<images.count; i++) {
+                [[XPNetWorkTool shareTool] uploadWithImage:images[i] WithCallBack:^(id obj) {
+                    [mStr appendString:obj];
+                    NSLog(@"%@",mStr);
+                }];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                hud.label.text = @"正在发布";
+            });
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [arr addObject:mStr];
+                [[XPNetWorkTool shareTool] publishuSupplyInfoWithImage:images andArr:arr andCallBack:^(id obj) {
+                    if ([[obj objectForKey:@"success"] isEqualToString:@"1"]){
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            hud.label.text = @"发布成功";
+                        });
+                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [weakSelf.navigationController popViewControllerAnimated:YES];
+                            [hud removeFromSuperview];
+                        });
+                    }else{
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            hud.label.text = @"发布失败";
+                        });
+                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [hud removeFromSuperview];
+                        });
+                    }
+                }];
+            });
+            
+        });
+    }else{
+        
+        hud.mode = MBProgressHUDModeText;
+        hud.label.text = @"需填写完整信息";
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [hud hideAnimated:YES];
+        });
+    }
 }
 
 - (void)setTableView{
-    UITableView *tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT) style:UITableViewStyleGrouped];
     tableView.delegate = self;
     tableView.dataSource = self;
     [tableView registerNib:[UINib nibWithNibName:@"XPBuyPublishTableViewCell" bundle:nil] forCellReuseIdentifier:salePublishCellID];
@@ -120,6 +191,11 @@ static NSString *salePublishCellID = @"salePublishCellID";
         cell.data = self.salePublishData[indexPath.row];
     }else{
         switch (indexPath.row) {
+            case 0:
+            {
+                cell.textField.keyboardType=UIKeyboardTypeDecimalPad;
+            }
+                break;
             case 2:
             {
                 XPBuyPickView *pickView = [[XPBuyPickView alloc]init];
@@ -142,6 +218,7 @@ static NSString *salePublishCellID = @"salePublishCellID";
                 break;
             case 5:
                 cell.userInteractionEnabled = NO;
+                
                 break;
             
         }
@@ -236,6 +313,7 @@ static NSString *salePublishCellID = @"salePublishCellID";
         [self.tableView reloadData];
     }
 }
+
 //- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingVideo:(UIImage *)coverImage sourceAssets:(PHAsset *)asset{
 //    if ((1 + self.imageArr.count) >9){
 //        [self presentViewController:[picker showAlertWithTitle:@"超过8张了"] animated:YES completion:nil];

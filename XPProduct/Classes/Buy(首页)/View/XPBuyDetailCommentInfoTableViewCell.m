@@ -7,6 +7,14 @@
 //
 
 #import "XPBuyDetailCommentInfoTableViewCell.h"
+#import "XPCommentModel.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+@interface XPBuyDetailCommentInfoTableViewCell ()
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *avatar;
+@property (weak, nonatomic) IBOutlet UILabel *content;
+
+@end
 
 @implementation XPBuyDetailCommentInfoTableViewCell
 
@@ -15,5 +23,11 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
+- (void)setModel:(XPCommentModel *)model{
+    _model =  model;
+    [self.avatar sd_setImageWithURL:[NSURL URLWithString: model.avatar] placeholderImage:[UIImage imageNamed:@"avatar_user"]];
+    self.nameLabel.text = model.user_name;
+    self.content.text = model.content;
+}
 
 @end
