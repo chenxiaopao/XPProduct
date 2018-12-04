@@ -16,6 +16,8 @@
 #import "UIImage+XPOriginImage.h"
 #import "XPReplyView.h"
 #import "XPNetWorkTool.h"
+#import "XPAlertTool.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 @interface XPMineUserDetailTableViewController () <UIImagePickerControllerDelegate,UINavigationControllerDelegate,XPReplyViewDelegate>
 @property (nonatomic,strong) NSArray *modelArr;
 @property (nonatomic,strong) UIImagePickerController *pickerController;
@@ -111,7 +113,13 @@ static NSString *const userSubtitleCellID  = @"userSubtitleCellID";
         }
         case 3:
         {
-            XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]init];
+            NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+            NSString *avatar = [[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"];
+            
+            NSString *user_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+            
+            XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]initWithName:userName andAvatar:avatar andUser_id:[user_id integerValue]];
+            
             [self.navigationController pushViewController:vc animated:NO];
             break;
         }
@@ -139,15 +147,44 @@ static NSString *const userSubtitleCellID  = @"userSubtitleCellID";
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"上传图片中。。。";
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    NSString *fullPath =  [UIImage saveImageWithImage:image andName:@"avatar"];
-    [[XPNetWorkTool shareTool] loadUserInfoWithFullParam:NO andIsAvatar:YES CallBack:^{
-        
-    }];
-    XPMineModel *model = self.modelArr[0];
-    model.icon = fullPath;
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    __weak __typeof(self) weakSelf = self;
     [picker dismissViewControllerAnimated:YES completion:nil];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [[XPNetWorkTool shareTool]upLoadToQNYWithImages:image addSeconds: 1 WithCallBack:^(id obj) {
+            NSString *url = obj;
+            if ([url isEqualToString:@"error"]){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    hud.label.text = @"上传失败";
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [hud removeFromSuperview];
+                        
+                    });
+                });
+            }else{
+                hud.label.text = @"上传成功";
+                [hud removeFromSuperview];
+                [[NSUserDefaults standardUserDefaults] setObject:url forKey:@"avatar"];
+                XPMineModel *model = weakSelf.modelArr[0];
+                model.icon = url;
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                [[XPNetWorkTool shareTool] loadUserInfoWithFullParam:NO andIsAvatar:YES CallBack:^{
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                        
+                    });
+                    
+                }];
+            }
+            
+        }];
+    });
+    
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{

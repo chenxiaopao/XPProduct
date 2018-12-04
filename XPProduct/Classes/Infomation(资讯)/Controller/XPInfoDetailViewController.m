@@ -31,15 +31,18 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-     
-    [WebViewJavascriptBridge enableLogging];
-    self.bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
-    [[XPNetWorkTool shareTool] loadInfoDetailDataFinish:^(id result, NSError *error) {
-        if (error == nil){
-
-            [self setWebViewDataByData:result];
-        }
-    }];
+    self.title = @"详情";
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.path]];
+    [self.webView loadRequest:request];
+    
+//    [WebViewJavascriptBridge enableLogging];
+//    self.bridge = [WebViewJavascriptBridge bridgeForWebView:self.webView];
+//    [[XPNetWorkTool shareTool] loadInfoDetailDataFinish:^(id result, NSError *error) {
+//        if (error == nil){
+//
+//            [self setWebViewDataByData:result];
+//        }
+//    }];
     
 }
 - (void)setWebViewDataByData:(id)result{

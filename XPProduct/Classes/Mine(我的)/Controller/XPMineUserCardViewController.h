@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XPMineUserCardViewController : UIViewController
-
+- (instancetype)initWithName:(NSString *)name andAvatar:(NSString *)avatar andUser_id:(NSInteger)user_id;
 @end

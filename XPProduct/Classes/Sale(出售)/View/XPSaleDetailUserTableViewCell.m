@@ -10,6 +10,7 @@
 #import "UIView+XPViewFrame.h"
 #import "XPPurchaseModel.h"
 #import "UIImage+XPOriginImage.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface XPSaleDetailUserTableViewCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *avatorView;
 @property (weak, nonatomic) IBOutlet UILabel *titleName;
@@ -26,7 +27,8 @@
 
 - (void)setPurchaseModel:(XPPurchaseModel *)purchaseModel{
     _purchaseModel = purchaseModel;
-    self.avatorView.image = [UIImage getImageWithName:@"avatar"];
+    [self.avatorView sd_setImageWithURL:[NSURL URLWithString: purchaseModel.user_avatar] placeholderImage:[UIImage imageNamed:@"avatar_user"]];
+//    [UIImage getImageWithName:@"avatar"];
     self.titleName.text = purchaseModel.user_name;
 }
 @end

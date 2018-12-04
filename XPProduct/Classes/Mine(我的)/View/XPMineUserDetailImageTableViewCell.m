@@ -10,6 +10,7 @@
 #import "XPMineModel.h"
 #import "UIView+XPViewFrame.h"
 #import "UIImage+XPOriginImage.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface XPMineUserDetailImageTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *titleName;
 @property (weak, nonatomic) IBOutlet UIImageView *avatorView;
@@ -27,7 +28,11 @@
 
 - (void)setModel:(XPMineModel *)model{
     _model = model;
-    self.avatorView.image = [UIImage getImageWithName:@"avatar"];
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"];
+    [self.avatorView sd_setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"avatar"]];
+    
+    
+    
     self.titleName.text = model.title;
 }
 

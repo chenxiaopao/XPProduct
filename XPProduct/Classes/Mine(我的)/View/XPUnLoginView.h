@@ -13,7 +13,7 @@
 @end
 
 @interface XPUnLoginView : UIView
-@property (nonatomic,strong) UIImage *image;
-@property (nonatomic,strong) NSString *userName;
+@property (nonatomic,weak) UIImageView *avatorView;
+@property (nonatomic,strong)  NSString *userName;
 @property (nonatomic,weak) id<XPUnLoginViewDelegate> delegate;
 @end

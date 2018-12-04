@@ -28,8 +28,12 @@
 
 - (void)setModel:(XPSupplyModel *)model{
     _model = model;
-    
-    self.titleLabel.text =  model.name;
+    if ([model.name containsString:@","]){
+        self.titleLabel.text =  [[model.name componentsSeparatedByString:@","] lastObject];
+    }else{
+        self.titleLabel.text = model.name;
+    }
+//    self.titleLabel.text =  model.name;
     self.userName.text = model.user_name;
     self.address.text = model.address;
     self.priceLabel.text = [NSString stringWithFormat:@"%.2f元",model.price];

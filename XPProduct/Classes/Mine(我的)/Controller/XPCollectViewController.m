@@ -61,13 +61,14 @@
     Vc1.isBuy = YES;
     
     Vc1.type = self.type;
-    Vc1.view.backgroundColor = [UIColor redColor];
+    Vc1.view.backgroundColor = [UIColor whiteColor];
     XPBaseCollectChildViewController *Vc2 = [[XPCollectChildViewController alloc]init];
-    Vc2.view.backgroundColor = [UIColor greenColor];
+    Vc2.view.backgroundColor = [UIColor whiteColor];
     Vc2.type = self.type;
     NSArray *childVcs = @[Vc1,Vc2];
     
     XPPageView *pageView = [[XPPageView alloc]initWithFrame:CGRectMake(0, XP_NavBar_Height, XP_SCREEN_WIDTH, height) titleArr:titleArr childVcs:childVcs parentVc:self contentViewCanScroll:isScroll];
+    
     [self.view addSubview:pageView];
     
 }

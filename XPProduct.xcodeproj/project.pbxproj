@@ -34,6 +34,8 @@
 		483F136521307E3F00D157D0 /* XPLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483F136421307E3F00D157D0 /* XPLoginViewController.m */; };
 		483F13682130818100D157D0 /* XPMineNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483F13672130818100D157D0 /* XPMineNavigationViewController.m */; };
 		484A481B218364A7002B8725 /* XPAlertTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 484A481A218364A7002B8725 /* XPAlertTool.m */; };
+		484DFFC521AD7EB7008ABD60 /* QNYTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 484DFFC421AD7EB7008ABD60 /* QNYTool.m */; };
+		484DFFC921B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 484DFFC821B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.m */; };
 		4858F860215F440200675790 /* XPSaleDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4858F85F215F440200675790 /* XPSaleDetailViewController.m */; };
 		4858F864215F483400675790 /* XPSaleDetailUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4858F862215F483400675790 /* XPSaleDetailUserTableViewCell.m */; };
 		4858F865215F483400675790 /* XPSaleDetailUserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4858F863215F483400675790 /* XPSaleDetailUserTableViewCell.xib */; };
@@ -87,6 +89,9 @@
 		48BFEB2C21A0697600673FF7 /* XPCommentAndSupplyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB2B21A0697600673FF7 /* XPCommentAndSupplyModel.m */; };
 		48BFEB3021A0997F00673FF7 /* XPNoDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB2E21A0997F00673FF7 /* XPNoDataTableViewCell.m */; };
 		48BFEB3121A0997F00673FF7 /* XPNoDataTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BFEB2F21A0997F00673FF7 /* XPNoDataTableViewCell.xib */; };
+		48BFEB3421A1A42A00673FF7 /* XPMessDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB3321A1A42A00673FF7 /* XPMessDetailModel.m */; };
+		48BFEB3821A1A61C00673FF7 /* XPInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BFEB3621A1A61C00673FF7 /* XPInfoTableViewCell.m */; };
+		48BFEB3921A1A61C00673FF7 /* XPInfoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48BFEB3721A1A61C00673FF7 /* XPInfoTableViewCell.xib */; };
 		48C1578F2191B73F00233606 /* XPCollectBrowseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1578E2191B73F00233606 /* XPCollectBrowseModel.m */; };
 		48C1579221954CD300233606 /* XPSupplyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1579121954CD300233606 /* XPSupplyModel.m */; };
 		48C1D9AC21541557008EA1E6 /* XPCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48C1D9AA21541556008EA1E6 /* XPCategoryView.m */; };
@@ -185,6 +190,10 @@
 		483F13672130818100D157D0 /* XPMineNavigationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPMineNavigationViewController.m; sourceTree = "<group>"; };
 		484A4819218364A7002B8725 /* XPAlertTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPAlertTool.h; sourceTree = "<group>"; };
 		484A481A218364A7002B8725 /* XPAlertTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPAlertTool.m; sourceTree = "<group>"; };
+		484DFFC321AD7EB7008ABD60 /* QNYTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QNYTool.h; sourceTree = "<group>"; };
+		484DFFC421AD7EB7008ABD60 /* QNYTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QNYTool.m; sourceTree = "<group>"; };
+		484DFFC721B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+XPGetWifiAndIP.h"; sourceTree = "<group>"; };
+		484DFFC821B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+XPGetWifiAndIP.m"; sourceTree = "<group>"; };
 		4858F85E215F440200675790 /* XPSaleDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPSaleDetailViewController.h; sourceTree = "<group>"; };
 		4858F85F215F440200675790 /* XPSaleDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPSaleDetailViewController.m; sourceTree = "<group>"; };
 		4858F861215F483400675790 /* XPSaleDetailUserTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPSaleDetailUserTableViewCell.h; sourceTree = "<group>"; };
@@ -280,6 +289,11 @@
 		48BFEB2D21A0997F00673FF7 /* XPNoDataTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPNoDataTableViewCell.h; sourceTree = "<group>"; };
 		48BFEB2E21A0997F00673FF7 /* XPNoDataTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPNoDataTableViewCell.m; sourceTree = "<group>"; };
 		48BFEB2F21A0997F00673FF7 /* XPNoDataTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XPNoDataTableViewCell.xib; sourceTree = "<group>"; };
+		48BFEB3221A1A42A00673FF7 /* XPMessDetailModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPMessDetailModel.h; sourceTree = "<group>"; };
+		48BFEB3321A1A42A00673FF7 /* XPMessDetailModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPMessDetailModel.m; sourceTree = "<group>"; };
+		48BFEB3521A1A61C00673FF7 /* XPInfoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPInfoTableViewCell.h; sourceTree = "<group>"; };
+		48BFEB3621A1A61C00673FF7 /* XPInfoTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPInfoTableViewCell.m; sourceTree = "<group>"; };
+		48BFEB3721A1A61C00673FF7 /* XPInfoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XPInfoTableViewCell.xib; sourceTree = "<group>"; };
 		48C1578D2191B73F00233606 /* XPCollectBrowseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPCollectBrowseModel.h; sourceTree = "<group>"; };
 		48C1578E2191B73F00233606 /* XPCollectBrowseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPCollectBrowseModel.m; sourceTree = "<group>"; };
 		48C1579021954CD300233606 /* XPSupplyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPSupplyModel.h; sourceTree = "<group>"; };
@@ -424,6 +438,8 @@
 				48C1D9C121555274008EA1E6 /* UIButton+XPAdjustFont.m */,
 				488F0317219769A6006F22E0 /* NSString+XPCalculateTimeSt.h */,
 				488F0318219769A6006F22E0 /* NSString+XPCalculateTimeSt.m */,
+				484DFFC721B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.h */,
+				484DFFC821B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -461,6 +477,8 @@
 				48A1864F213FDA9700BC4C4B /* XPNetWorkTool.m */,
 				484A4819218364A7002B8725 /* XPAlertTool.h */,
 				484A481A218364A7002B8725 /* XPAlertTool.m */,
+				484DFFC321AD7EB7008ABD60 /* QNYTool.h */,
+				484DFFC421AD7EB7008ABD60 /* QNYTool.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -606,6 +624,8 @@
 				4831B230214055B200E95426 /* XPInfoDetailModel.m */,
 				4831B2322140560600E95426 /* XPImageModel.h */,
 				4831B2332140560600E95426 /* XPImageModel.m */,
+				48BFEB3221A1A42A00673FF7 /* XPMessDetailModel.h */,
+				48BFEB3321A1A42A00673FF7 /* XPMessDetailModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -613,6 +633,9 @@
 		48D38416212C7776002634B3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				48BFEB3521A1A61C00673FF7 /* XPInfoTableViewCell.h */,
+				48BFEB3621A1A61C00673FF7 /* XPInfoTableViewCell.m */,
+				48BFEB3721A1A61C00673FF7 /* XPInfoTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -916,6 +939,7 @@
 				485AF2F8214F7F4700557190 /* productCategory.plist in Resources */,
 				483F1357212F18F400D157D0 /* XPMIneSettingModelData.plist in Resources */,
 				48D6F9EF215E0B27000C2914 /* XPSalePublishImageCell.xib in Resources */,
+				48BFEB3921A1A61C00673FF7 /* XPInfoTableViewCell.xib in Resources */,
 				48187ABC216F7BE000F20BFD /* XPMineUserDetailImageTableViewCell.xib in Resources */,
 				48D6F9E7215D5A2E000C2914 /* XPSalePublishTimeViewController.xib in Resources */,
 				486D28862146FC1300F98B57 /* XPBuyCategoryCollectionViewCell.xib in Resources */,
@@ -978,10 +1002,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-XPProduct/Pods-XPProduct-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/HappyDNS/HappyDNS.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
+				"${BUILT_PRODUCTS_DIR}/Qiniu/Qiniu.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/TZImagePickerController/TZImagePickerController.framework",
 				"${BUILT_PRODUCTS_DIR}/WebViewJavascriptBridge/WebViewJavascriptBridge.framework",
@@ -989,10 +1015,12 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HappyDNS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Qiniu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TZImagePickerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebViewJavascriptBridge.framework",
@@ -1035,6 +1063,7 @@
 				4858F8782163B35A00675790 /* XPCollectChildViewController.m in Sources */,
 				48C1D9B221542A4F008EA1E6 /* XPScreeningResultViewController.m in Sources */,
 				48E535BA2167A35D00FF3349 /* XPBuyDetailHeadView.m in Sources */,
+				484DFFC521AD7EB7008ABD60 /* QNYTool.m in Sources */,
 				4858F8722160E55800675790 /* XPPageView.m in Sources */,
 				48BFEB2821A0531B00673FF7 /* XPMineTableViewCell.m in Sources */,
 				4805E80C21821BC90089B75B /* XPPurchaseModel.m in Sources */,
@@ -1043,6 +1072,7 @@
 				48D38432212C7D8D002634B3 /* XPNavigationViewController.m in Sources */,
 				48A1B87F216BCA9200887406 /* XPDetailSubCommentInfoTableViewCell.m in Sources */,
 				486D289521497FB600F98B57 /* XPSearchHistorySectionHeadView.m in Sources */,
+				48BFEB3421A1A42A00673FF7 /* XPMessDetailModel.m in Sources */,
 				48BFEB2421A052D800673FF7 /* XPMineCommentTableViewController.m in Sources */,
 				486D289A214A2BDE00F98B57 /* XPBaseSearchRecommendTableViewCell.m in Sources */,
 				483F135B212F436D00D157D0 /* XPClearCacheTool.m in Sources */,
@@ -1074,9 +1104,11 @@
 				486D28742146E21A00F98B57 /* XPBuyTableView.m in Sources */,
 				48D6F9B62158BFEB000C2914 /* XPBuyInfoTableViewCell.m in Sources */,
 				48C1D9AF2154159B008EA1E6 /* XPCategoryViewController.m in Sources */,
+				48BFEB3821A1A61C00673FF7 /* XPInfoTableViewCell.m in Sources */,
 				48D6F9D2215BA565000C2914 /* XPBuyPickView.m in Sources */,
 				48D6F9C4215A9FAD000C2914 /* XPBuyPublishModel.m in Sources */,
 				48C1D9AC21541557008EA1E6 /* XPCategoryView.m in Sources */,
+				484DFFC921B0ADD2008ABD60 /* NSString+XPGetWifiAndIP.m in Sources */,
 				4831B231214055B200E95426 /* XPInfoDetailModel.m in Sources */,
 				48E535C02167E1F900FF3349 /* XPBuyDetailProductInfoTableViewCell.m in Sources */,
 				48BFEB3021A0997F00673FF7 /* XPNoDataTableViewCell.m in Sources */,
@@ -1253,7 +1285,7 @@
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = XPProduct/Classes/Other/PrefixHeader.pch;
 				INFOPLIST_FILE = XPProduct/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1275,7 +1307,7 @@
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = XPProduct/Classes/Other/PrefixHeader.pch;
 				INFOPLIST_FILE = XPProduct/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

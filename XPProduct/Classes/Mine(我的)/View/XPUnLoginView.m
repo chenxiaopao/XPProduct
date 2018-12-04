@@ -10,11 +10,11 @@
 #import "UIView+XPViewFrame.h"
 #import "UIImage+XPOriginImage.h"
 #import "UIImage+XPOriginImage.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface XPUnLoginView ()
 
 @property (nonatomic,weak) UIImageView *bgImageView;
 @property (nonatomic,weak) UIView *bgAvatorView;
-@property (nonatomic,weak) UIImageView *avatorView;
 @property (nonatomic,weak) UILabel *nameLabel;
 @property (nonatomic,weak) UIImageView *arrowImageView;
 @property (nonatomic,weak) UIView *bottomView;
@@ -26,20 +26,18 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-//        [self setDefaultAvatar];
         [self setUpUI];
     }
     return self;
 }
 
-- (void)setImage:(UIImage *)image{
-    _image = image;
-    self.avatorView.image = image;
-}
 - (void)setUserName:(NSString *)userName{
     _userName = userName;
+    self.nameLabel.width = [self labelWidthWithString:userName withLabelHeight:60];
     self.nameLabel.text = userName;
+    self.arrowImageView.x = CGRectGetMaxX(self.nameLabel.frame)+5;
 }
+
 
 - (void)setUpUI{
     UIImageView *bgImageView = [[UIImageView alloc]init];
@@ -63,10 +61,13 @@
     
     UILabel *nameLabel = [[UILabel alloc]init];
     nameLabel.font = [UIFont boldSystemFontOfSize:18];
-    nameLabel.textAlignment = NSTextAlignmentRight;
     nameLabel.textColor = [UIColor whiteColor];
+    
+    nameLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+    
     [self.bgAvatorView addSubview:nameLabel];
     self.nameLabel = nameLabel;
+    
     UIImage *image =  [UIImage imageNamed:@"icon_right_arrow"];
     UIImageView *arrowImageView = [[UIImageView alloc]initWithImage:[image xp_imageWithColor:[UIColor whiteColor]]];
     
@@ -77,12 +78,15 @@
     bottomView.backgroundColor = [UIColor colorWithDisplayP3Red:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
     self.bottomView = bottomView;
     [self.bgImageView addSubview:bottomView];
+
 }
 - (void)layoutSubviews{
     [super layoutSubviews];
+   
     self.bgImageView.frame = CGRectMake(0, 0, self.width, self.height-30);
     CGFloat bgAvatorViewH = 60;
-    CGFloat bgAvatorViewW = 200;
+    CGFloat width = [self labelWidthWithString:self.nameLabel.text withLabelHeight:bgAvatorViewH];
+    CGFloat bgAvatorViewW = XP_SCREEN_WIDTH-30;
     CGFloat bgAvatorViewX = 20;
     CGFloat bgAvatorViewY = self.height-160;
 //    self.center.y - bgAvatorViewH/2;
@@ -96,7 +100,7 @@
    
     self.nameLabel.center = CGPointMake(0, CGRectGetMidY(self.avatorView.frame));
     self.nameLabel.x = CGRectGetMaxX(self.avatorView.frame)+5;
-    [self.nameLabel sizeToFit];
+    self.nameLabel.bounds = CGRectMake(0, 0, width, bgAvatorViewH);
     
     CGFloat arrowImageViewH = 20;
     CGFloat arrowImageViewW = 20;
@@ -112,5 +116,14 @@
     if ([self.delegate respondsToSelector: @selector(unLoginView:avatorViewClick:)]){
         [self.delegate unLoginView:self avatorViewClick:self.bgAvatorView];
     }
+}
+
+- (CGFloat)labelWidthWithString:(NSString *)text withLabelHeight:(CGFloat)height{
+    NSDictionary *attriDict = @{NSFontAttributeName:[UIFont systemFontOfSize:15]};
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(MAXFLOAT, height) options:NSStringDrawingUsesLineFragmentOrigin attributes:attriDict context:nil];
+    if (rect.size.width >XP_SCREEN_WIDTH -100){
+        rect.size.width = XP_SCREEN_WIDTH -100;
+    }
+    return rect.size.width+20;
 }
 @end

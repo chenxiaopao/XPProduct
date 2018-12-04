@@ -12,11 +12,28 @@
 #import "UIView+XPViewFrame.h"
 #import "XPBaseCollectChildViewController.h"
 #import "XPMineBuyOrSaleChildViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface XPMineUserCardViewController ()
+@property (nonatomic,weak) UIImageView *avatorView;
+@property (nonatomic,weak) UILabel *nameLabel;
+@property (nonatomic,strong) NSString *name;
+@property (nonatomic,strong) NSString *avatar;
+@property (nonatomic,assign) NSInteger user_id;
 
 @end
 
 @implementation XPMineUserCardViewController
+
+
+- (instancetype)initWithName:(NSString *)name andAvatar:(NSString *)avatar andUser_id:(NSInteger)user_id{
+    self = [super init];
+    if (self) {
+        self.user_id = user_id;
+        self.name = name;
+        self.avatar = avatar;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,7 +44,9 @@
     [self.view addSubview:imageView];
     
     UIImageView *avatorView = [[UIImageView alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(imageView.frame)-30, 60, 60)];
-    avatorView.image = [UIImage getImageWithName:@"avatar"];
+
+    [avatorView sd_setImageWithURL:[NSURL URLWithString:self.avatar] placeholderImage:[UIImage imageNamed:@"avatar"]];
+    self.avatorView = avatorView;
     avatorView.layer.masksToBounds = YES;
     avatorView.layer.cornerRadius = avatorView.width/2;
     [self.view addSubview:avatorView];
@@ -37,7 +56,8 @@
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 50, 100, 30)];
     label.font = [UIFont systemFontOfSize:20];
-    label.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+    self.nameLabel = label;
+    self.nameLabel.text = self.name;
     [middleView addSubview:label];
 
     UIView *bottomLine = [[UIView alloc]initWithFrame:CGRectMake(0, middleView.height-1, middleView.width, 1)];
@@ -45,23 +65,26 @@
     [middleView addSubview:bottomLine];
     [self.view addSubview:middleView];
     
+    CGFloat height = (XP_SCREEN_HEIGHT) -CGRectGetMaxY(middleView.frame);
+   
     
     //bottomView
     NSArray *titleArr = @[@"采购",@"供应"];
-    XPMineBuyOrSaleChildViewController *Vc1 = [[XPMineBuyOrSaleChildViewController alloc]init];
-    XPMineBuyOrSaleChildViewController *Vc2 = [[XPMineBuyOrSaleChildViewController alloc]init];
- 
+    XPMineBuyOrSaleChildViewController *Vc1 = [[XPMineBuyOrSaleChildViewController alloc]initWithUser_Id:self.user_id andHeight:height];
+    
+    XPMineBuyOrSaleChildViewController *Vc2 = [[XPMineBuyOrSaleChildViewController alloc]initWithUser_Id:self.user_id andHeight:height];
+    
     Vc1.type = XPMineBuyOrSaleCellTypeActive;
     Vc1.isBuy = YES;
-    Vc1.view.backgroundColor = [UIColor redColor];
+    Vc1.view.backgroundColor = [UIColor whiteColor];
     
     Vc2.type = XPMineBuyOrSaleCellTypeActive;
     Vc2.isBuy = NO;
-    Vc2.view.backgroundColor = [UIColor greenColor];
+    Vc2.view.backgroundColor = [UIColor whiteColor];
     
     NSArray *childVcs = @[Vc1,Vc2];
    
-    CGFloat height = (XP_SCREEN_HEIGHT) -CGRectGetMaxY(middleView.frame);
+    
     XPPageView *pageView = [[XPPageView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(middleView.frame), XP_SCREEN_WIDTH, height) titleArr:titleArr childVcs:childVcs parentVc:self contentViewCanScroll:YES];
     [self.view addSubview:pageView];
     

@@ -36,6 +36,7 @@
 @property (nonatomic,strong) NSArray *commentModelArr;
 @property (nonatomic,strong) WebViewJavascriptBridge *bridge;
 @property (nonatomic,strong) XPCollectBrowseModel *collectBrowseModel;
+@property (nonatomic,strong) UIImage *shadowImage;
 @property (nonatomic,weak) UIButton *collectBtn;
 @end
 
@@ -116,7 +117,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     [self setTableViewAndWebView];
     [self setTableHeadViewAndFooterView];
     [self addAlphaView];
@@ -126,7 +127,11 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 }
 
 - (void)addBottomView{
-    UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, XP_SCREEN_HEIGHT-60, XP_SCREEN_WIDTH, 60)];
+    CGFloat frameY = XP_SCREEN_HEIGHT - 60;
+    if (IS_IPHONE_X){
+        frameY-=XP_BottomBar_Height;
+    }
+    UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, frameY, XP_SCREEN_WIDTH, 60)];
     bottomView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:bottomView];
     
@@ -170,10 +175,17 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 
 - (void)callBtnClick:(UIButton *)sender{
     if ([[NSUserDefaults standardUserDefaults]objectForKey:@"isLogin"]){
-        [XPAlertTool callToUserWithPhone:self.supplyModel.user_phone toView:self.view];
+        NSInteger userId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] integerValue];
+        if (self.supplyModel.user_id != userId){
+            [XPAlertTool callToUserWithPhone:self.supplyModel.user_phone toView:self.view];
+        }else{
+            [XPAlertTool showAlertWithSupeView:self.view andText:@"不能对自己收藏或者打电话"];
+        }
+        
         
     }else{
-        [XPAlertTool showAlertWithSupeView:self.view andText:@"请先登录"];
+        [XPAlertTool showLoginViewControllerWithVc:self orOtherVc:self andSelectedIndex:0];
+//        [XPAlertTool showAlertWithSupeView:self.view andText:@"请先登录"];
     }
     
 }
@@ -189,18 +201,23 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 }
 
 - (void)collectBtnClick:(UIButton *)sender{
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"isLogin"]){
-        if (self.collectBrowseModel.state == 1){//state为1表示已收藏，当前显示为取消收藏
-            [sender setTitle:@"添加收藏" forState:UIControlStateNormal];
-            [self CollectActionIsAdd:NO];
+    NSInteger userId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] integerValue];
+    if (self.supplyModel.user_id != userId){
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"isLogin"]){
+            if (self.collectBrowseModel.state == 1){//state为1表示已收藏，当前显示为取消收藏
+                [sender setTitle:@"添加收藏" forState:UIControlStateNormal];
+                [self CollectActionIsAdd:NO];
+            }else{
+                [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
+                [self CollectActionIsAdd:YES];
+            }
         }else{
-            [sender setTitle:@"取消收藏" forState:UIControlStateNormal];
-            [self CollectActionIsAdd:YES];
+            [XPAlertTool showLoginViewControllerWithVc:self orOtherVc:self andSelectedIndex:0];
+//            [XPAlertTool showAlertWithSupeView:self.view andText:@"请先登录"];
         }
     }else{
-        [XPAlertTool showAlertWithSupeView:self.view andText:@"请先登录"];
+        [XPAlertTool showAlertWithSupeView:self.view andText:@"不能对自己收藏或者打电话"];
     }
-
 }
 
 - (void)CollectActionIsAdd:(BOOL)isAdd{
@@ -274,7 +291,9 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 - (void)setScrollViewContentSize{
     CGFloat tableViewContentSizeHeight =  self.tableView.contentSize.height;
     CGFloat webViewContentSizeHeight =  self.webView.scrollView.contentSize.height;
-    
+    if (IS_IPHONE_X){
+        webViewContentSizeHeight += 40;
+    }
     self.scrollView.contentSize = CGSizeMake(self.scrollView.width, tableViewContentSizeHeight+webViewContentSizeHeight);
     self.tableViewContentSizeHeight = tableViewContentSizeHeight;
     self.webViewContentSizeHeight = webViewContentSizeHeight;
@@ -359,8 +378,14 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [self.navigationController.navigationBar setShadowImage:self.shadowImage];
+    [super viewWillDisappear:animated];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.shadowImage = self.navigationController.navigationBar.shadowImage;
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init]];
 //    self.navigationController.navigationBar.translucent =  YES;
@@ -435,10 +460,12 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
             if (self.commentModelArr.count==0){
                 XPBuyNoCommentView *commentView = [[XPBuyNoCommentView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, 125)];
                 commentView.delegate = self;
+                commentView.selectionStyle = UITableViewCellSelectionStyleNone;
                 return commentView;
             }else{
                 XPBuyDetailCommentInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:commentInfoCellID];
                 cell.model = self.commentModelArr[0];
+                
                 return cell;
             }
             break;
@@ -484,13 +511,16 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
    
     if (indexPath.section == 1){
-        XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]init];
+        XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]initWithName:self.supplyModel.user_name andAvatar:self.supplyModel.user_avatar andUser_id:self.supplyModel.user_id];
+        
         [self.navigationController pushViewController:vc animated:NO];
     }else if(indexPath.section==2){
-        XPBuyCommentViewController *vc =[[XPBuyCommentViewController alloc]init];
-        vc.commentDataArr = self.commentModelArr;
-        vc.product_id = self.supplyModel._id;
-        [self.navigationController pushViewController:vc animated:NO];
+        if (self.commentModelArr.count > 0){
+            XPBuyCommentViewController *vc =[[XPBuyCommentViewController alloc]init];
+            vc.commentDataArr = self.commentModelArr;
+            vc.product_id = self.supplyModel._id;
+            [self.navigationController pushViewController:vc animated:NO];
+        }
     }
 }
 
@@ -512,7 +542,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     for (NSString *imageUrl in images) {
         CGFloat width = XP_SCREEN_WIDTH -20;
         CGFloat Height = width *1.2;
-        NSString *imageStr = [NSString stringWithFormat:@"<img src = 'loading' id = '%@' width = '%.0f' height = '%.0f' hspace='0.0' vspace='5'>",[self replaceUrlSpecialString:imageUrl],width,Height];
+        NSString *imageStr = [NSString stringWithFormat:@"<img src = 'loading' id = '%@' width = '%.0f' height = '%.0f' hspace='0.0' vspace='5'><hr/>",[self replaceUrlSpecialString:imageUrl],width,Height];
         [allStr appendString:imageStr];
         
         
@@ -539,7 +569,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
         if ([imageManager.imageCache diskImageDataExistsWithKey:cacheKey]){
             NSString *jsData =[NSString stringWithFormat:@"replaceImage%@,%@",[self replaceUrlSpecialString:imageUrl],imagePath];
             [self.bridge callHandler:@"showImage" data:jsData responseCallback:^(id responseData) {
-                NSLog(@"%@",responseData);
+//                NSLog(@"%@",responseData);
                 
             }];
         }else{
@@ -550,7 +580,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
                     [imageManager.imageCache storeImage:image forKey:[self replaceUrlSpecialString:imageUrl] completion:^{
                         NSString *jsData =[NSString stringWithFormat:@"replaceImage%@,%@",[self replaceUrlSpecialString:imageUrl],imagePath];
                         [self.bridge callHandler:@"showImage" data:jsData responseCallback:^(id responseData) {
-                            NSLog(@"%@",responseData);
+//                            NSLog(@"%@",responseData);
                             
                         }];
                     }];

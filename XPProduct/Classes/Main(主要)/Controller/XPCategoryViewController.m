@@ -19,14 +19,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"全部分类";
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategory" ofType:@"plist"];
+    self.view.backgroundColor = [UIColor whiteColor];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategoryContainAll" ofType:@"plist"];
     NSDictionary *categoryData = [NSDictionary dictionaryWithContentsOfFile:filePath];
-    XPCategoryView *categoryView =  [[XPCategoryView alloc]initWithFrame:self.view.bounds categoryData:categoryData];
+    CGRect frame = CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_NavBar_Height));
+    if (IS_IPHONE_X){
+        frame.size.height = frame.size.height-XP_BottomBar_Height;
+    }
+    XPCategoryView *categoryView =  [[XPCategoryView alloc]initWithFrame:frame categoryData:categoryData];
     categoryView.delegate = self;
     [categoryView show];
     [self.view addSubview:categoryView];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.translucent = NO;
+}
 
 #pragma mark - XPCategoryViewDelegate
 - (void)XPCategoryView:(XPCategoryView *)categoryView didSelectedTitleArr:(NSArray *)titleArr{

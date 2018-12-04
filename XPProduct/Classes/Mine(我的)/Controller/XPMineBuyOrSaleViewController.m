@@ -34,13 +34,13 @@
         Vc3.isBuy = YES;
     }
     Vc1.type = XPMineBuyOrSaleCellTypeActive;
-    Vc1.view.backgroundColor = [UIColor redColor];
+    Vc1.view.backgroundColor = [UIColor whiteColor];
     
     Vc2.type = XPMineBuyOrSaleCellTypeInactive;
-    Vc2.view.backgroundColor = [UIColor greenColor];
+    Vc2.view.backgroundColor = [UIColor whiteColor];
     
     Vc3.type = XPMineBuyOrSaleCellTypeDisabled;
-    Vc3.view.backgroundColor = [UIColor blueColor];
+    Vc3.view.backgroundColor = [UIColor whiteColor];
     
     NSArray *childVcs = @[Vc1,Vc2,Vc3];
     if (self.isBuy){

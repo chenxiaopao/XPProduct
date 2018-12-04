@@ -9,6 +9,9 @@
 #import "AppDelegate.h"
 #import "XPTabBarController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "NSString+XPGetWifiAndIP.h"
+
+
 @interface AppDelegate ()
 
 @end
@@ -21,6 +24,9 @@
     self.window.rootViewController = tabBarVC;
     [self.window makeKeyAndVisible];
     
+    NSLog(@"%@", [NSString getWiFiIPAddress]);
     return YES;
 }
+
+
 @end

@@ -9,6 +9,7 @@
 #import "XPBuyDetailUserInfoTableViewCell.h"
 #import "UIView+XPViewFrame.h"
 #import "XPSupplyModel.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @implementation XPBuyDetailUserInfoTableViewCell
 
 - (void)awakeFromNib{
@@ -21,7 +22,7 @@
 - (void)setModel:(XPSupplyModel *)model{
     _model = model;
     self.nameLabel.text = model.user_name;
-//    self.avatorView
+    [self.avatorView sd_setImageWithURL:[NSURL URLWithString:model.user_avatar] placeholderImage:[UIImage imageNamed:@"avatar"]];
 }
 
 @end

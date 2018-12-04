@@ -1,4 +1,4 @@
-//
+    //
 //  XPSalePublishViewController.m
 //  XPProduct
 //
@@ -17,12 +17,14 @@
 #import "TZImagePickerController.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "XPNetWorkTool.h"
+#import "UIView+XPViewFrame.h"
 @interface XPSalePublishViewController () <UITableViewDataSource,UITableViewDelegate,XPBuyPickViewDelegate,XPSalePublishImageCollectionViewDelegate,TZImagePickerControllerDelegate>
 @property (nonatomic,weak) UITableView *tableView;
 @property (nonatomic,strong) NSArray *salePublishData;
 @property (nonatomic,strong) NSMutableArray *imageArr;
 @property (nonatomic,assign) CGFloat footerViewH;
 @property (nonatomic,strong) NSMutableArray *assets;
+@property (nonatomic,strong) UIButton *btn;
 @end
 
 static NSString *salePublishCellID = @"salePublishCellID";
@@ -65,17 +67,23 @@ static NSString *salePublishCellID = @"salePublishCellID";
     self.title = @"发布供应";
     [self setTableView];
     
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
     [self addPublishBtn];
+    
 }
 
 - (void)addPublishBtn{
-    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(10, XP_SCREEN_HEIGHT-50, XP_SCREEN_WIDTH-20, 40)];
+    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(10, self.view.height-50, XP_SCREEN_WIDTH-20, 40)];
     [btn setTitle:@"发布供应" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     btn.backgroundColor = [UIColor greenColor];
     btn.layer.cornerRadius = 10;
     btn.layer.masksToBounds = YES;
     [btn addTarget:self action:@selector(publishBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.btn = btn;
     [self.view addSubview:btn];
     self.footerViewH = 100;
 }
@@ -106,39 +114,48 @@ static NSString *salePublishCellID = @"salePublishCellID";
         __weak typeof(self) weakSelf = self;
         __block NSMutableString *mStr = [NSMutableString string];
         dispatch_async(queue, ^{
-            for (int i=0; i<images.count; i++) {
-                [[XPNetWorkTool shareTool] uploadWithImage:images[i] WithCallBack:^(id obj) {
-                    [mStr appendString:obj];
-                    NSLog(@"%@",mStr);
-                }];
-            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 hud.label.text = @"正在发布";
             });
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [arr addObject:mStr];
-                [[XPNetWorkTool shareTool] publishuSupplyInfoWithImage:images andArr:arr andCallBack:^(id obj) {
-                    if ([[obj objectForKey:@"success"] isEqualToString:@"1"]){
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            hud.label.text = @"发布成功";
-                        });
-                        
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            [weakSelf.navigationController popViewControllerAnimated:YES];
-                            [hud removeFromSuperview];
-                        });
-                    }else{
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            hud.label.text = @"发布失败";
-                        });
-                        
+            for (int i=0; i<images.count; i++) {
+            
+                [[XPNetWorkTool shareTool] upLoadToQNYWithImages: images[i] addSeconds:i WithCallBack:^(id obj) {
+                    [mStr appendString:[NSString stringWithFormat:@"%@,", obj]];
+                    
+                    
+                    if (i==images.count-1){
+                        NSLog(@"allStr%@",mStr);
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            [hud removeFromSuperview];
+                            
+                            [arr addObject:mStr];
+                            [[XPNetWorkTool shareTool] publishuSupplyInfoWithImage:images andArr:arr andCallBack:^(id obj) {
+                                if ([[obj objectForKey:@"success"] isEqualToString:@"1"]){
+                                    
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        
+                                        hud.label.text = @"发布成功";
+                                    });
+                                    
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                                        [hud removeFromSuperview];
+                                    });
+                                }else{
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        hud.label.text = @"发布失败";
+                                    });
+                                    
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        [hud removeFromSuperview];
+                                    });
+                                }
+                            }];
                         });
                     }
                 }];
-            });
             
+               
+            }
         });
     }else{
         
@@ -182,7 +199,8 @@ static NSString *salePublishCellID = @"salePublishCellID";
             cell.block = ^{
                 XPBuyCategoryViewController *vc = [[XPBuyCategoryViewController alloc]init];
                 vc.popBlock = ^(NSArray * arr, NSInteger index) {
-                    weakCell.textField.text = [arr lastObject];
+                    weakCell.textField.text = [arr componentsJoinedByString:@","];
+//                    weakCell.textField.text = [arr lastObject];
                 };
                 [weakSelf.navigationController pushViewController:vc animated:NO];
     

@@ -41,13 +41,13 @@
             currentX = currentX+lastLabelWidth + leftSpace;
         }
         
-        NSLog(@"%f",currentX);
+        
         
         if (currentX+labelWidth+leftSpace > XP_SCREEN_WIDTH){
             row += 1;
             currentY = marginY + row *(labelHeight + topSpace);
             currentX = marginX;
-            NSLog(@"%f",currentX);
+            
         }
         lastLabelWidth = labelWidth;
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(currentX, currentY, labelWidth, labelHeight)];

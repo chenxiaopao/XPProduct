@@ -165,8 +165,6 @@ static NSString *const detailCommentInfoCellID = @"detailCommentInfoCellID";
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
             });
-            
-            
         }];
     }
     

@@ -16,7 +16,7 @@
 
 #define IS_IPHONE_X (XP_SCREEN_HEIGHT==812.0f)?1:0
 #define XP_StatusBar_Height (IS_IPHONE_X==1)?44.0f: 20.0f
-
+#define XP_BottomBar_Height 34.0f
 #define XP_NavBar_Height (IS_IPHONE_X==1)?88.0f: 64.0f
 //#define Height_TabBar  (IS_IPHONE_X==YES)?83.0f: 49.0f
 

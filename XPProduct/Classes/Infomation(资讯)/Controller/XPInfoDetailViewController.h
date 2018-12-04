@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XPInfoDetailViewController : UIViewController
-
+@property (nonatomic,strong) NSString *path;
 @end

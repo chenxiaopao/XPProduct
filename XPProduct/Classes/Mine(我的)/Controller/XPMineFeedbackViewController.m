@@ -7,7 +7,9 @@
 //
 
 #import "XPMineFeedbackViewController.h"
-
+#import "XPNetWorkTool.h"
+#import "XPAlertTool.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 @interface XPMineFeedbackViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *contactBtn;
 @property (weak, nonatomic) IBOutlet UIButton *submitBtn;
@@ -65,7 +67,22 @@
 
 - (IBAction)submitBtnClick:(UIButton *)sender {
     [self.textView resignFirstResponder];
-    NSLog(@"click");
+    NSString *text = [self.textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"正在反馈中。。。";
+    [[XPNetWorkTool shareTool]postFeedbackInfo:text andCallBack:^(NSInteger tag) {
+        [hud removeFromSuperview];
+        if (tag){
+            [XPAlertTool showAlertWithSupeView:self.view andText:@"反馈成功"];
+        }else{
+            [XPAlertTool showAlertWithSupeView:self.view andText:@"反馈失败"];
+        }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        
+    }];
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];

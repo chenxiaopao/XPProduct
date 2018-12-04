@@ -9,6 +9,7 @@
 
 #import "XPPageView.h"
 #import "UIView+XPViewFrame.h"
+#import "XPConst.h"
 //@class contentView;
 //@protocol ContentViewDelegate <NSObject>
 //- (void)contentView:(contentView *)contentView progress:(CGFloat)progress
@@ -52,7 +53,7 @@ static NSString *const contentID = @"contentID";
     layout.itemSize = CGSizeMake(self.width, self.height-self.titleView.height);
     UICollectionView *collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, self.titleView.height, self.width, self.height-self.titleView.height) collectionViewLayout:layout];
     
-    NSLog(@"%@",NSStringFromCGRect(collectionView.frame));
+    
     if (!self.canScroll){
         collectionView.scrollEnabled = NO;
     }
@@ -69,6 +70,7 @@ static NSString *const contentID = @"contentID";
         [self.parentVc addChildViewController:vc];
         vc.view.frame = collectionView.bounds;
     }
+    
     
 }
 #pragma mark - 设置titleView
@@ -98,8 +100,11 @@ static NSString *const contentID = @"contentID";
         label.userInteractionEnabled = YES;
         label.textAlignment = NSTextAlignmentCenter;
         [label addGestureRecognizer:tap];
+        
         label.text = self.titleArr[i];
+    
         [scrollView addSubview:label];
+//        [scrollView bringSubviewToFront:label];
     }
     
     UIView *scrollLine = [[UIView alloc]initWithFrame:CGRectMake(0, scrollView.height-1.5, width, 1)];
@@ -114,6 +119,7 @@ static NSString *const contentID = @"contentID";
     
     self.titleView = scrollView;
     [self addSubview:scrollView];
+    
 }
 
 

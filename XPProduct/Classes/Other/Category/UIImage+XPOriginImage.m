@@ -7,7 +7,7 @@
 //
 
 #import "UIImage+XPOriginImage.h"
-
+#import "XPNetWorkTool.h"
 @implementation UIImage (XPOriginImage)
 
 + (instancetype)xp_originImageNamed:(NSString *)imageName{
@@ -34,19 +34,26 @@
     NSData *imageData =  UIImagePNGRepresentation(image);
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
     NSString *fullPath = [path stringByAppendingPathComponent:name];
-    //保存到内存
-    [imageData writeToFile:fullPath atomically:NO];
-    
-    //保存到userdefaults
-    [[NSUserDefaults standardUserDefaults] setObject:fullPath forKey:name];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+//    //保存到内存
+//    [imageData writeToFile:fullPath atomically:NO];
+//    
+//    //保存到userdefaults
+//    [[NSUserDefaults standardUserDefaults] setObject:fullPath forKey:name];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
     //上传到服务器
     
+    [[XPNetWorkTool shareTool]upLoadToQNYWithImages:image addSeconds:1 WithCallBack:^(id obj) {
+        NSString *url = obj;
+        NSLog(@"%@",url);
+        [[NSUserDefaults standardUserDefaults] setObject:url forKey:name];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }];
     return fullPath;
 }
 
 + (UIImage *)getImageWithName:(NSString *)name{
     UIImage *image = nil;
+    
     if([[NSUserDefaults standardUserDefaults] objectForKey:name]){
         NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
         NSString *fullPath = [path stringByAppendingPathComponent:name];

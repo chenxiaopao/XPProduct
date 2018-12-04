@@ -14,6 +14,7 @@
 @property (nonatomic,assign) NSInteger user_id;
 @property (nonatomic,strong) NSString *user_phone;
 @property (nonatomic,strong) NSString *user_name;
+@property (nonatomic,strong) NSString *user_avatar;
 @property (nonatomic,strong) NSString *publishTime;
 @property (nonatomic,strong) NSString *saleTime;
 @property (nonatomic,strong) NSString *descriptions;

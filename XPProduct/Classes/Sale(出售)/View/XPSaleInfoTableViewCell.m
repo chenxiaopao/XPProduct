@@ -26,10 +26,17 @@
 
 - (void)setModel:(XPPurchaseModel *)model{
     _model = model;
-    self.nameLabel.text = model.name;
+    if ([model.name containsString:@","]){
+        self.nameLabel.text =  [[model.name componentsSeparatedByString:@","] lastObject];
+    }else{
+        self.nameLabel.text = model.name;
+    }
+    
     self.descrpitionLabel.text = model.descriptions;
     self.publishTimeLabel.text = model.publishTime;
     self.countLabel.text = model.count;
     self.addressLabel.text = model.address;
 }
+
+
 @end

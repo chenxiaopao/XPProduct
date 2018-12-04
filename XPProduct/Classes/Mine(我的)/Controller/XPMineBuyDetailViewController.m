@@ -48,8 +48,11 @@ static int const buyBottomBtnTag = 3000;
         }
             break;
     }
-    
-    UIButton *leftBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, XP_SCREEN_HEIGHT-50, (XP_SCREEN_WIDTH-20), 40)];
+    CGFloat frameY = XP_SCREEN_HEIGHT-50;
+    if (IS_IPHONE_X){
+        frameY -= XP_BottomBar_Height;
+    }
+    UIButton *leftBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, frameY, (XP_SCREEN_WIDTH-20), 40)];
     [self setBtnPropertyWithBtn:leftBtn andTitle:leftTitle andBackgroundColor:[UIColor blueColor]];
     leftBtn.tag = buyBottomBtnTag;
     [self setBtnRadiusWithBtn:leftBtn androundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft];
@@ -79,6 +82,9 @@ static int const buyBottomBtnTag = 3000;
         }
         case XPMineBuyOrSaleCellTypeDisabled: {
             if (sender.tag == buyBottomBtnTag) {
+                NSString *state = @"-2";
+                NSString *title = @"删除";
+                [self updateSupplyWithState:state andTitle:title];
                 
             }
             break;

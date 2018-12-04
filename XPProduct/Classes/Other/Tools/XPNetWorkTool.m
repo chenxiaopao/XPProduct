@@ -10,6 +10,10 @@
 #import "XPNetWorkTool.h"
 #import "XPConst.h"
 #import "XPPurchaseModel.h"
+#import "QiniuSDK.h"
+#import "QNYTool.h"
+
+
 @implementation XPNetWorkTool
 + (instancetype)shareTool{
     static XPNetWorkTool *share;
@@ -19,14 +23,23 @@
     });
     return share;
 }
-- (void)loadInfoDetailDataFinish:(void(^)(id result,NSError *error))finish{
-    NSString *url = @"http://c.3g.163.com/nc/article/AQ72N9QG00051CA1/full.html";
-    
-    
-    [self POST:url parameters:nil  progress:^(NSProgress * _Nonnull uploadProgress) {
+- (void)loadInfoDetailWithPage:(NSInteger)page DataFinish:(void(^)(id result,NSError *error))finish{
+    NSString *url = @"http://www.qqncpw.cn/informationInterfaces.api?getInformations";
+//    http://www.qqncpw.cn/html/information/20181107151648.html
+//    http://www.qqncpw.cn/images/goods//1541577961334.jpg
+//    http://www.qqncpw.cn/informationInterfaces.api?getInformations
+
+    NSDictionary *dict = @{
+                           @"member_id":@"17619",
+                           @"member_token":@"564acef5adb09",
+                           @"parent_id":@"5",
+                           @"page":@(page)
+                           };
+    [self POST:url parameters:dict  progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        finish(responseObject,nil);
+        NSDictionary *dict = [responseObject objectForKey:@"data"];
+        finish(dict,nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         finish(nil,error);
     }];
@@ -84,9 +97,9 @@
                  @"phone":phone
                  };
     }
-
+    NSLog(@"%@",param);
     [self POST:url parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+        NSLog(@"%@",responseObject);
         if (responseObject != nil){
             NSDictionary *dict = responseObject;
             [defaults setObject:dict[@"userName"] forKey:@"userName"];
@@ -114,6 +127,7 @@
     if (arr.count > 0){
         NSString *user_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
         NSString *user_name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+        NSString *avatar = [[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"];
         user_name = [user_name stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLQueryAllowedCharacterSet]];
         
         NSString *user_phone = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
@@ -128,16 +142,17 @@
         NSString *address = [arr[3] stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLQueryAllowedCharacterSet]];
         NSString *descriptions = [arr[4] stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLQueryAllowedCharacterSet]];
         dict =@{@"user_id":user_id,
-                              @"user_name":user_name,
-                              @"user_phone":user_phone,
-                              @"publishTime":timeStr,
-                              @"name":name,
-                              @"address":address,
-                              @"count":count,
-                              @"state":@"1",
-                              @"price":arr[2],
-                              @"descriptions":descriptions
-                              };
+              @"user_name":user_name,
+              @"user_phone":user_phone,
+              @"user_avatar":avatar,
+              @"publishTime":timeStr,
+              @"name":name,
+              @"address":address,
+              @"count":count,
+              @"state":@"1",
+              @"price":arr[2],
+              @"descriptions":descriptions
+              };
     }else{
         dict = @{@"user_id": [NSString stringWithFormat:@"%ld",(long)model.user_id ],
                  @"state":state,
@@ -241,6 +256,7 @@
     if (arr.count > 0){
         NSString *user_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
         NSString *user_name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+        NSString *user_avatar = [[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"];
         user_name = [user_name stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLQueryAllowedCharacterSet]];
         
         NSString *user_phone = [[NSUserDefaults standardUserDefaults] objectForKey:@"phone"];
@@ -261,6 +277,7 @@
         dict =@{@"user_id":user_id,
                 @"user_name":user_name,
                 @"user_phone":user_phone,
+                @"user_avatar":user_avatar,
                 @"saleTime":saleTime,
                 @"name":name,
                 @"address":address,
@@ -277,16 +294,9 @@
     
     NSString *url = [NSString stringWithFormat:@"%@publishSupplyInfoServlet",BASE_URL];
     self.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/plain"];
+    
+    
     [self POST:url parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-//        for (int i = 0; i < images.count; i ++) {
-//            NSDateFormatter *formatter=[[NSDateFormatter alloc]init];
-//            formatter.dateFormat=@"yyyyMMddHHmmss";
-//            NSString *str=[formatter stringFromDate:[NSDate date]];
-//            NSString *fileName=[NSString stringWithFormat:@"%@.jpg",str];
-//            UIImage *image = images[i];
-//            NSData *imageData = UIImageJPEGRepresentation(image, 0.28);
-//            [formData appendPartWithFileData:imageData name:str fileName:fileName mimeType:@"image/jpeg"];
-//        }
 
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         NSLog(@"%lld,%lld",uploadProgress.totalUnitCount,uploadProgress.completedUnitCount);
@@ -308,7 +318,7 @@
             dateformatter.dateFormat = @"yyMMddHHmmss";
             NSString *str = [dateformatter stringFromDate:[NSDate new]];
             NSString *fileName=[NSString stringWithFormat:@"%@.png",str];
-            NSData *imageData = UIImageJPEGRepresentation(images, 0.28);
+            NSData *imageData = UIImageJPEGRepresentation(images, 0.1);
             
             [formData appendPartWithFileData:imageData name:@"smfile" fileName:fileName mimeType:@"image/png"];
         } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -442,17 +452,17 @@
     dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm:ss";
     NSString *timeStr = [dateFormatter stringFromDate:date];
     NSString *userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"userName"];
+    NSString *avatar = [[NSUserDefaults standardUserDefaults]objectForKey:@"avatar"];
     userName = [userName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     content = [content stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 
     NSDictionary *dict = @{
                            @"topic_id":@(product_id),
                            @"from_uid":[[NSUserDefaults standardUserDefaults]objectForKey:@"user_id"],
-//                           @"to_uid":@"",
                            @"content":content,
-//                           @"avatar":@"",
                            @"time":timeStr,
-                           @"user_name":userName
+                           @"user_name":userName,
+                           @"user_avatar":avatar
                            };
     
     self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/plain",nil];
@@ -483,6 +493,50 @@
     
     [self POST:url parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         callback(responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)upLoadToQNYWithImages:(UIImage *)images addSeconds:(NSInteger)seconds WithCallBack:(void (^)(id obj))callback{
+    NSString *token = [QNYTool token];
+    QNUploadManager *upManager = [[QNUploadManager alloc] init];
+    
+    NSDateFormatter *dateformatter = [[NSDateFormatter alloc]init];
+    dateformatter.dateFormat = @"yyMMddHHmmss";
+    
+    NSTimeInterval timeInterval = [[NSDate new] timeIntervalSince1970];
+    
+    NSString *uid = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+    NSString *fileName = [NSString stringWithFormat:@"user_id_%@%f.jpg",uid,timeInterval];
+    NSData *imageData = UIImageJPEGRepresentation(images, 0.1);
+    
+    [upManager putData:imageData key:fileName token:token
+              complete: ^(QNResponseInfo *info, NSString *key, NSDictionary *resp) {
+                  if (resp!=nil){
+                      NSString *img = resp[@"key"];
+                      NSString *url = [NSString stringWithFormat:@"%@%@",QNY_URL,img];
+                      callback(url);
+                  }else{
+                      callback(@"error");
+                      NSLog(@"info:%@",info);
+                  }
+                  
+                  
+              } option:nil];
+}
+
+- (void)postFeedbackInfo:(NSString *)info andCallBack:(void (^)(NSInteger tag))callback{
+    NSString *user_id = [[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"];
+    info = [info stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSDictionary *dict = @{
+                           @"user_id":user_id,
+                           @"info":info
+                           };
+     NSString *url = [NSString stringWithFormat:@"%@feedbackInfoServlet",BASE_URL];
+    [self POST:url parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSInteger tag = [[responseObject objectForKey:@"success"] integerValue];
+        callback(tag);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"%@",error);
     }];

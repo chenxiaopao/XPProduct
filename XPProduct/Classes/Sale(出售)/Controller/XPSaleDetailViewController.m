@@ -126,8 +126,11 @@ static NSString *const saleDetailNormalCellID = @"saleDetailNormalCellID";
     [self setBtnPropertyWithBtn:self.collectBtn andTitle:title andBackgroundColor:[UIColor blueColor]];
 }
 - (void)setBottomBtn{
-    
-    UIButton *collectBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,XP_SCREEN_HEIGHT-50, (XP_SCREEN_WIDTH-20)/2, 40)];
+    CGFloat frameY = XP_SCREEN_HEIGHT - 50;
+    if (IS_IPHONE_X){
+        frameY-=XP_BottomBar_Height;
+    }
+    UIButton *collectBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,frameY, (XP_SCREEN_WIDTH-20)/2, 40)];
     if (self.collectBrowseModel==nil){
         [self setBtnPropertyWithBtn:collectBtn andTitle:@"添加收藏" andBackgroundColor:[UIColor blueColor]];
     }
@@ -136,7 +139,7 @@ static NSString *const saleDetailNormalCellID = @"saleDetailNormalCellID";
     [self setBtnRadiusWithBtn:collectBtn androundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft];
     [self.view addSubview:collectBtn];
     
-    UIButton *rightBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(collectBtn.frame), XP_SCREEN_HEIGHT-50, (XP_SCREEN_WIDTH-20)/2, 40)];
+    UIButton *rightBtn = [[UIButton alloc]initWithFrame:CGRectMake(CGRectGetMaxX(collectBtn.frame), frameY, (XP_SCREEN_WIDTH-20)/2, 40)];
     UIColor *rightColor =  [UIColor colorWithRed:255/255.0 green:120/255.0 blue:17/255.0 alpha:1];
     NSString *rightTitle = @"打电话";
     [self setBtnPropertyWithBtn:rightBtn andTitle:rightTitle andBackgroundColor:rightColor];
@@ -294,7 +297,8 @@ static NSString *const saleDetailNormalCellID = @"saleDetailNormalCellID";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]init];
+    XPMineUserCardViewController *vc = [[XPMineUserCardViewController alloc]initWithName:self.purchaseModel.user_name andAvatar:self.purchaseModel.user_avatar andUser_id:self.purchaseModel.user_id];
+
     [self.navigationController pushViewController:vc animated:NO];
 }
 

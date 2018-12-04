@@ -18,6 +18,7 @@
 - (void)awakeFromNib{
     [super awakeFromNib];
     self.textField.delegate = self;
+    [self.titleLabel sizeToFit];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   

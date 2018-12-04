@@ -11,6 +11,7 @@
 #import "UIView+XPViewFrame.h"
 #import "XPDetailSubCommentInfoTableView.h"
 #import "Masonry.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface XPDetailCommentInfoTableViewCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *avatorView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -37,6 +38,7 @@
 - (void)setModel:(XPCommentModel *)model{
     
     _model = model;
+    [self.avatorView sd_setImageWithURL:[NSURL URLWithString:model.avatar] placeholderImage:[UIImage imageNamed:@"avatar"]];
     self.timeLabel.text = model.time;
     self.nameLabel.text = model.user_name;
     self.commentLabel.text = model.content;

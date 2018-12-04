@@ -8,6 +8,7 @@
 
 #import "XPBuyTableView.h"
 #import "XPBuyInfoTableViewCell.h"
+#import "XPConst.h"
 @interface XPBuyTableView () <UITableViewDataSource,UITableViewDelegate,XPBuyCollectionViewDelegate>
 @property (nonatomic,strong) NSArray *categoryData;
 

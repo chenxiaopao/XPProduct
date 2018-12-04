@@ -27,7 +27,7 @@ static NSString *const buyPublishCellID = @"buyPublishCellID";
         NSArray *arr = @[
                          @{@"titleName":@"采购货品:",@"subTitleName":@"例如（柚子）"},
                          @{@"titleName":@"采购数量:",@"subTitleName":@"例如（1000斤）"},
-                         @{@"titleName":@"采购单价:",@"subTitleName":@"例如（2.5）默认单位元，不用填"},
+                         @{@"titleName":@"采购单价:",@"subTitleName":@"例如（2.5）默认元"},
                          @{@"titleName":@"采购地区:",@"subTitleName":@"例如（福建省福州市）"},
                          @{@"titleName":@"其他描述:",@"subTitleName":@"例如（期望品种）"},
                          ];
@@ -145,8 +145,8 @@ static NSString *const buyPublishCellID = @"buyPublishCellID";
             cell.block = ^{
                 XPBuyCategoryViewController *vc = [[XPBuyCategoryViewController alloc]init];
                 vc.popBlock = ^(NSArray * arr, NSInteger index) {
-                    
-                    weakCell.textField.text = [arr lastObject];
+                    weakCell.textField.text = [arr componentsJoinedByString:@","];
+//                    weakCell.textField.text = [arr lastObject];
                 };
                 
                 

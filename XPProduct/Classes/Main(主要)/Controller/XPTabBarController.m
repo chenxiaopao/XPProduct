@@ -19,8 +19,6 @@
 
 @end
 
-
-
 @implementation XPTabBarController
 
 - (void)viewDidLoad{

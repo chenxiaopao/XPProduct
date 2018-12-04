@@ -11,4 +11,5 @@
 @interface XPMineBuyOrSaleChildViewController : UIViewController
 @property (nonatomic,assign) XPMineBuyOrSaleCellType type;
 @property (nonatomic,assign) BOOL isBuy;
+- (instancetype)initWithUser_Id:(NSInteger)user_id andHeight:(CGFloat)height;
 @end

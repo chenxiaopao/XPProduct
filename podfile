@@ -9,6 +9,6 @@ pod 'WebViewJavascriptBridge'
 pod 'AFNetworking'
 pod 'SDWebImage'
 pod 'TZImagePickerController'
-
+pod "Qiniu", "~> 7.1"
 end
 

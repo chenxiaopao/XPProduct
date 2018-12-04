@@ -23,6 +23,7 @@
 #import "XPSupplyModel.h"
 #import "XPSaleDetailViewController.h"
 #import "XPBuyDetailViewController.h"
+#import "XPConst.h"
 @interface XPScreeningResultViewController () <XPCategoryViewDelagete,MenuScreeningViewDelegate,UITableViewDelegate,UITableViewDataSource,XPGraySearchViewDelegate>
 @property (nonatomic,weak) XPCategoryView *categoryView;
 @property (nonatomic,weak) UIButton *categoryBtn;
@@ -50,7 +51,7 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 
 - (NSDictionary *)categoryData{
     if (_categoryData == nil){
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategory" ofType:@"plist"];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategoryContainAll" ofType:@"plist"];
         NSDictionary *categoryData = [NSDictionary dictionaryWithContentsOfFile:filePath];
         _categoryData =categoryData;
     }
@@ -144,8 +145,12 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 }
 
 - (void)setTableView{
+    
     CGFloat height = (XP_SCREEN_HEIGHT)- (XP_NavBar_Height)- 40;
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, XP_NavBar_Height+40, XP_SCREEN_WIDTH,height )];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, (XP_NavBar_Height)+32, XP_SCREEN_WIDTH,height )];
+    if (IS_IPHONE_X){
+        tableView.height = tableView.height - XP_BottomBar_Height+8;
+    }
     tableView.dataSource =self;
     tableView.delegate = self;
     if (self.isSale){
@@ -155,8 +160,18 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
         [tableView registerNib:[UINib nibWithNibName:@"XPBuyInfoTableViewCell" bundle:nil] forCellReuseIdentifier:XPBuyInfoTableViewCellID];
         
     }
+    tableView.tableFooterView = [UIView new];
     [self.view addSubview:tableView];
     self.tableView = tableView;
+    
+//    if (@available(iOS 11.0, *)) {
+//        [self.tableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+//    } else {
+//        self.automaticallyAdjustsScrollViewInsets = NO;
+//    }
+    
+    
+    
 }
 
 - (void)hideCategoryView{
@@ -182,11 +197,22 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 - (void)setDropView{
     UIButton *categoryBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, XP_NavBar_Height, XP_SCREEN_WIDTH/3-1, 40)];
     self.categoryBtn = categoryBtn;
+    categoryBtn.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:categoryBtn];
-    NSString *title = self.categoryTitleArr.lastObject;
+    NSString *title;
+    if ([self.categoryTitleArr.lastObject isEqualToString:@"全部"]){
+        title = self.categoryTitleArr.firstObject;
+    }else{
+        title = self.categoryTitleArr.lastObject;
+    }
     self.leftTitle = self.categoryTitleArr.firstObject;
     [self.requestData setObject:title forKey:@"category"];
     
+    MenuScreeningView *menu = [[MenuScreeningView alloc]initWithFrame:CGRectMake(XP_SCREEN_WIDTH/3, XP_NavBar_Height, XP_SCREEN_WIDTH, 40)];
+    menu.backgroundColor = [UIColor whiteColor];
+    self.menu = menu;
+    menu.delegate = self;
+    [self.view addSubview:menu];
     
     [categoryBtn setTitle:title forState:UIControlStateNormal];
     [categoryBtn adjustBtnFont];
@@ -197,6 +223,8 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     [self adjustCategoryBtnInset];
     UIView *seperatorLine = [[UIView alloc]init];
     [self.view addSubview:seperatorLine];
+    
+    
     UIView *bottomLine = [[UIView alloc]init];
     bottomLine.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:bottomLine];
@@ -214,11 +242,7 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
         make.height.equalTo(@1);
     }];
     
-    
-    MenuScreeningView *menu = [[MenuScreeningView alloc]initWithFrame:CGRectMake(XP_SCREEN_WIDTH/3, XP_NavBar_Height, XP_SCREEN_WIDTH, 40)];
-    self.menu = menu;
-    menu.delegate = self;
-    [self.view addSubview:menu];
+   
     
     [self.tableView.mj_header beginRefreshing];
     

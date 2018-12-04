@@ -11,7 +11,7 @@
 @class XPPurchaseModel;
 @interface XPNetWorkTool : AFHTTPSessionManager
 + (instancetype)shareTool;
-- (void)loadInfoDetailDataFinish:(void(^)(id result,NSError *error))finish;
+- (void)loadInfoDetailWithPage:(NSInteger)page DataFinish:(void(^)(id result,NSError *error))finish;
 
 - (void)getCaptchaWithPhone:(NSString *)phone andCaptcha:(NSString *)captcha andCallback:(void(^)(NSString *phone))callback;
 
@@ -40,5 +40,9 @@
 - (void)insertCommentInfoWithProduct_id:(NSInteger)product_id WithContent:(NSString *)content andCallBack:(void (^)(NSInteger tag))callBack;
 
 - (void)loadCommentAndSupplyInfoIsDeleteAll:(BOOL)delete WithCallback:(void(^)(id obj))callback;
+
+- (void)upLoadToQNYWithImages:(UIImage *)images addSeconds:(NSInteger)seconds WithCallBack:(void (^)(id obj))callback;
+
+- (void)postFeedbackInfo:(NSString *)info andCallBack:(void (^)(NSInteger tag))callback;
 @end
 

@@ -140,9 +140,9 @@ static NSString *const categoryLeftCellID = @"categoryLeftCellID";
     if (tableView.tag == 10000){
         return 0;
     }else{
-//        if (section == 0){
-//            return 30;
-//        }
+        if (section == 0){
+            return 30;
+        }
         return 60;
     }
 }
@@ -161,9 +161,9 @@ static NSString *const categoryLeftCellID = @"categoryLeftCellID";
 #pragma mark - XPBaseCategoryRightCellDelagate
 - (void)baseCategoryRightCell:(XPBaseCategoryRightCell *)cell didselectedTitle:(NSString *)title{
     if ([self.delegate respondsToSelector:@selector(XPCategoryView:didSelectedTitleArr:)]){
-//        if (![title isEqualToString:@"全部"]){
+        if (![title isEqualToString:@"全部"]){
             [self.titleArr addObject:title];
-//        }
+        }
         [self.delegate XPCategoryView:self didSelectedTitleArr:self.titleArr];
     }
 }

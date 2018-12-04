@@ -31,7 +31,7 @@ static NSString *const detailSubCommentCellID = @"detailSubCommentCellID";
 - (void)setUI{
     self.scrollEnabled = NO;
     
-    self.backgroundColor = [UIColor redColor];
+    
     self.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
     [self registerNib:[UINib nibWithNibName:@"XPDetailSubCommentInfoTableViewCell" bundle:nil] forCellReuseIdentifier:detailSubCommentCellID];
     self.delegate = self;

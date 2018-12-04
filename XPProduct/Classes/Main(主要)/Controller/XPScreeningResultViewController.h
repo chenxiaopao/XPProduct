@@ -12,6 +12,5 @@
 @property (nonatomic,strong) NSArray *categoryTitleArr;
 @property (nonatomic,assign) BOOL isSale;
 
-- (void)pullUpRefreshData;
 - (void)pullDownRefreshData;
 @end

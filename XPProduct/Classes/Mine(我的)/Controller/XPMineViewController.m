@@ -13,7 +13,7 @@
 #import "XPMineCommentTableViewController.h"
 #import "XPMineUserDetailTableViewController.h"
 #import "UIImage+XPOriginImage.h"
-
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface XPMineViewController () <XPUnLoginViewDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
 @property (nonatomic,strong) NSArray *cellDataArr;
 @property (nonatomic,weak) UITableView *tableView;
@@ -118,7 +118,9 @@ static NSString *const mineMiddleCellID = @"mineMiddleCellID";
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init] ];
     self.unLoginView.userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
-    self.unLoginView.image = [UIImage getImageWithName:@"avatar"];
+    NSString *str = [[NSUserDefaults standardUserDefaults] objectForKey:@"avatar"];
+    [self.unLoginView.avatorView sd_setImageWithURL: [NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"avatar"]];
+    
 }
 
 #pragma mark - UITableView

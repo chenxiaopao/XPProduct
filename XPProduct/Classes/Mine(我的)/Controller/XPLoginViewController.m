@@ -32,6 +32,7 @@ int totalTime = 60;
 }
 
 - (void)closeBtnClick{
+    [self removeTimer];
     [self.phoneTextField resignFirstResponder];
     [self.autoCodeTextField resignFirstResponder];
     XPTabBarController *tabBarVC = [XPTabBarController new];
@@ -57,9 +58,9 @@ int totalTime = 60;
     captchaRandom = arc4random()%8999 + 1000;
     NSString *str = [NSString stringWithFormat:@"code=%d",captchaRandom];
     NSLog(@"%@",str);
-//    [[XPNetWorkTool shareTool] getCaptchaWithPhone:self.phoneTextField.text andCaptcha:str andCallback:^(NSString *phone) {
-//        phoneNumber = phone;
-//    }];
+    [[XPNetWorkTool shareTool] getCaptchaWithPhone:self.phoneTextField.text andCaptcha:str andCallback:^(NSString *phone) {
+        phoneNumber = phone;
+    }];
     phoneNumber = self.phoneTextField.text;
     UIColor *color = [UIColor grayColor];
     [self setGetAutoCodeBtnState:NO andColor:color andBorderColor:color];
@@ -69,13 +70,15 @@ int totalTime = 60;
 //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
 //    [[NSRunLoop mainRunLoop]addTimer:timer forMode:NSRunLoopCommonModes];
 //    self.timer = timer;
+    
     NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(detachNewThread) object:nil];
     [thread start];
     
     
 }
 - (void)detachNewThread{
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+    NSTimer *timer =[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+    self.timer = timer;
     [[NSRunLoop currentRunLoop ] run];
 }
 - (void)viewWillDisappear:(BOOL)animated{
@@ -114,6 +117,7 @@ int totalTime = 60;
 }
 
 - (void)loginBtnClick:(UIButton*)sender{
+    sender.enabled = NO;
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if ([self.phoneTextField.text isEqualToString:@""]&&[self.autoCodeTextField.text isEqualToString:@""]){
         
@@ -143,8 +147,7 @@ int totalTime = 60;
     [defaults setBool:YES forKey:@"isLogin"];
     [defaults setObject:phoneNumber forKey:@"phone"];
     [defaults setObject:@"用户名" forKey:@"userName"];
-    UIImage *image = [UIImage imageNamed:@"avatar_user"];
-    [UIImage saveImageWithImage:image andName:@"avatar"];
+    [defaults setObject:@"http://piut06x58.bkt.clouddn.com/avatar_user.png" forKey:@"avatar"];
     [defaults synchronize];
     __weak typeof(self) weakSelf = self;
     [[XPNetWorkTool shareTool] loadUserInfoWithFullParam:YES andIsAvatar:NO CallBack:^{
@@ -165,8 +168,6 @@ int totalTime = 60;
 
 -(void)addTopView{
     UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//    UIImage *image = [UIImage imageNamed:@"icon_close"];
-//    UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UIImage *newImage = [UIImage xp_originImageNamed:@"icon_close"];
     [closeBtn setImage:newImage forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(closeBtnClick) forControlEvents:UIControlEventTouchUpInside];

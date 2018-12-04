@@ -89,6 +89,8 @@
     tableView.mj_header = header;
     [tableView.mj_header beginRefreshing];
     [self.view addSubview:tableView];
+    
+   
  
 }
 
@@ -143,7 +145,7 @@
 - (void)buyTableViewDidScroll:(XPBuyTableView *)tableView{
     
     CGFloat startOffsetY = -self.bannerViewHeight;
-    NSLog(@"%f***%f***%f",tableView.contentOffset.y,startOffsetY,self.bannerView.y);
+//    NSLog(@"%f***%f***%f",tableView.contentOffset.y,startOffsetY,self.bannerView.y);
     if (tableView.contentOffset.y <= 0.0){
         self.bannerView.y =startOffsetY - tableView.contentOffset.y;
     }
