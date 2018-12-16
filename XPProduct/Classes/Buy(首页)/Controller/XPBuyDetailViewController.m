@@ -25,7 +25,7 @@
 #import <MJExtension/MJExtension.h>
 #import "XPBuyNoCommentView.h"
 #import "XPCommentModel.h"
-@interface XPBuyDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,XPBuyDetailHeadViewDelegate,XPBuyNoCommentViewDelegate>
+@interface XPBuyDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,XPBuyDetailHeadViewDelegate,XPBuyNoCommentViewDelegate,UIWebViewDelegate>
 
 @property (nonatomic,weak) UIView *alphaView;
 @property (nonatomic,weak) UITableView *tableView;
@@ -38,6 +38,7 @@
 @property (nonatomic,strong) XPCollectBrowseModel *collectBrowseModel;
 @property (nonatomic,strong) UIImage *shadowImage;
 @property (nonatomic,weak) UIButton *collectBtn;
+@property (nonatomic,weak) UIImageView *imageView;
 @end
 
 static NSString *const productInfoCellID = @"productInfoCellID";
@@ -118,13 +119,43 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
     [self setTableViewAndWebView];
     [self setTableHeadViewAndFooterView];
     [self addAlphaView];
     [self addObserver];
     [self addBottomView];
-  
+    
 }
+
+- (void)addBigImageView{
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectZero];
+    self.imageView = imageView;
+    imageView.center = self.view.center;
+    imageView.backgroundColor = [UIColor blackColor];
+    imageView.alpha = 0;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideImageView)];
+    [imageView addGestureRecognizer:tap];
+    imageView.userInteractionEnabled = YES;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    [window addSubview:imageView];
+}
+
+- (void)hideImageView{
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        
+        self.imageView.alpha = 0;
+        self.imageView.center = self.view.center;
+        self.imageView.frame = CGRectZero;
+        
+    } completion:^(BOOL finished) {
+        [self.imageView removeFromSuperview];
+    }];
+    
+    
+}
+
 
 - (void)addBottomView{
     CGFloat frameY = XP_SCREEN_HEIGHT - 60;
@@ -354,7 +385,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     
     
     UIWebView *webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, XP_SCREEN_HEIGHT, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT)];
-    
+    webView.delegate = self;
     [scrollView addSubview:webView];
     self.webView = webView;
     [self.view addSubview:scrollView];
@@ -362,7 +393,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 
     self.bridge = [WebViewJavascriptBridge bridgeForWebView:webView];
     [self setWebViewDataByData:self.supplyModel.images];
-    
+    [self showDetailImage];
     
     if iOS11_LATER{
         [scrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
@@ -535,9 +566,26 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 
 
 #pragma mark - WebViewJavascriptBridge
-- (void)setWebViewDataByData:(NSArray *)images{
 
+- (void)showDetailImage{
+    [self.bridge registerHandler:@"showDetailImage" handler:^(id data, WVJBResponseCallback responseCallback) {
+        [self addBigImageView];
+        NSDictionary *dict = (NSDictionary *)data;
+        NSString *imageUrl = dict[@"key"];
+        imageUrl = [imageUrl substringFromIndex:7];
+        NSLog(@"我帅%@",imageUrl);
+        [UIView animateWithDuration:1 animations:^{
+            CGRect rect = CGRectMake(0, XP_StatusBar_Height, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_StatusBar_Height));
+            
+            self.imageView.frame = self.view.bounds;
+            self.imageView.alpha = 1;
+            self.imageView.image = [UIImage imageWithContentsOfFile:imageUrl];
+        }];
+    }];
     
+}
+
+- (void)setWebViewDataByData:(NSArray *)images{
     NSMutableString *allStr = [NSMutableString stringWithString:@""];
     for (NSString *imageUrl in images) {
         CGFloat width = XP_SCREEN_WIDTH -20;
@@ -599,4 +647,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 - (void)buyNoCommentView:(XPBuyNoCommentView *)view commentBtnClick:(UIButton *)commentBtn{
     [self commentBtnClick:commentBtn];
 }
+
+
+
 @end

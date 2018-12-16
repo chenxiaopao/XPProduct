@@ -41,6 +41,7 @@
 - (void)XPCategoryView:(XPCategoryView *)categoryView didSelectedTitleArr:(NSArray *)titleArr{
     XPScreeningResultViewController *vc = [[XPScreeningResultViewController alloc]init];
     vc.categoryTitleArr = titleArr;
+    vc.isTop = YES;
     [self.navigationController pushViewController:vc animated:YES];
 
 }

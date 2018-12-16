@@ -67,7 +67,7 @@
 - (void)setBannerView{
     
     XPBannerView *bannerView = [[XPBannerView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, self.bannerViewHeight)];
-    bannerView.backgroundColor = [UIColor redColor];
+    
     NSArray *imageArr = @[@"boluo",@"xigua",@"youzi",@"caomei"];
     bannerView.imageArr = imageArr;
     bannerView.delegate = self;

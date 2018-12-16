@@ -11,6 +11,6 @@
 @interface XPScreeningResultViewController : UIViewController
 @property (nonatomic,strong) NSArray *categoryTitleArr;
 @property (nonatomic,assign) BOOL isSale;
-
+@property (nonatomic,assign) BOOL isTop;
 - (void)pullDownRefreshData;
 @end

@@ -49,6 +49,7 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 }
 
 
+
 - (NSDictionary *)categoryData{
     if (_categoryData == nil){
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategoryContainAll" ofType:@"plist"];
@@ -145,9 +146,16 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 }
 
 - (void)setTableView{
+    CGRect frame ;
+    if (self.isTop){
+        CGFloat height = (XP_SCREEN_HEIGHT)- 40;
+        frame = CGRectMake(0, 32, XP_SCREEN_WIDTH,height );
+    }else{
+        CGFloat height = (XP_SCREEN_HEIGHT)- (XP_NavBar_Height)- 40;
+        frame = CGRectMake(0, (XP_NavBar_Height)+32, XP_SCREEN_WIDTH,height );
+    }
     
-    CGFloat height = (XP_SCREEN_HEIGHT)- (XP_NavBar_Height)- 40;
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, (XP_NavBar_Height)+32, XP_SCREEN_WIDTH,height )];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:frame];
     if (IS_IPHONE_X){
         tableView.height = tableView.height - XP_BottomBar_Height+8;
     }
@@ -164,11 +172,11 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     [self.view addSubview:tableView];
     self.tableView = tableView;
     
-//    if (@available(iOS 11.0, *)) {
-//        [self.tableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
-//    } else {
-//        self.automaticallyAdjustsScrollViewInsets = NO;
-//    }
+    if (@available(iOS 11.0, *)) {
+        [self.tableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     
     
     
@@ -195,7 +203,14 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
 }
 
 - (void)setDropView{
-    UIButton *categoryBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, XP_NavBar_Height, XP_SCREEN_WIDTH/3-1, 40)];
+    CGFloat originY ;
+    if (self.isTop){
+        originY = 0;
+    }else{
+        originY = XP_NavBar_Height;
+    }
+    
+    UIButton *categoryBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, originY, XP_SCREEN_WIDTH/3-1, 40)];
     self.categoryBtn = categoryBtn;
     categoryBtn.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:categoryBtn];
@@ -208,7 +223,7 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     self.leftTitle = self.categoryTitleArr.firstObject;
     [self.requestData setObject:title forKey:@"category"];
     
-    MenuScreeningView *menu = [[MenuScreeningView alloc]initWithFrame:CGRectMake(XP_SCREEN_WIDTH/3, XP_NavBar_Height, XP_SCREEN_WIDTH, 40)];
+    MenuScreeningView *menu = [[MenuScreeningView alloc]initWithFrame:CGRectMake(XP_SCREEN_WIDTH/3, originY, XP_SCREEN_WIDTH, 40)];
     menu.backgroundColor = [UIColor whiteColor];
     self.menu = menu;
     menu.delegate = self;
