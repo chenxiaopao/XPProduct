@@ -9,7 +9,7 @@
 #import "XPMineSettingTableViewController.h"
 #import "XPLoginViewController.h"
 #import "MJExtension.h"
-#import "MBProgressHUD.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 #import "XPMineModel.h"
 #import "XPClearCacheTool.h"
 @interface XPMineSettingTableViewController ()

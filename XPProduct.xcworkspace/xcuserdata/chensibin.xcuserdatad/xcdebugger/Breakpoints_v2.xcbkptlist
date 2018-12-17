@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "XPProduct/Classes/Sale(&#x51fa;&#x552e;)/Controller/XPSaleDetailViewController.m"
-            timestampString = "565633438.66433"
+            filePath = "XPProduct/Classes/Buy(&#x9996;&#x9875;)/Controller/XPBuyDetailViewController.m"
+            timestampString = "566760549.7664829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
-            landmarkName = "-setBottomBtn"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "-webViewLoad"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XPProduct/Classes/Buy(&#x9996;&#x9875;)/Controller/XPBuyDetailViewController.m"
-            timestampString = "566532649.987608"
+            timestampString = "566760549.768096"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "574"
-            endingLineNumber = "574"
-            landmarkName = "-showDetailImage"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "-viewWillAppear:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,108 +41,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "XPProduct/Classes/Buy(&#x9996;&#x9875;)/Controller/XPBuyDetailViewController.m"
-            timestampString = "566532649.9877599"
+            filePath = "Pods/WebViewJavascriptBridge/WebViewJavascriptBridge/WebViewJavascriptBridge.m"
+            timestampString = "566760549.769061"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "576"
-            endingLineNumber = "576"
-            landmarkName = "-showDetailImage"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "XPProduct/Classes/Buy(&#x9996;&#x9875;)/Controller/XPBuyDetailViewController.m"
-            timestampString = "566532649.987872"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "577"
-            endingLineNumber = "577"
-            landmarkName = "-showDetailImage"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__44-[XPBuyDetailViewController showDetailImage]_block_invoke"
-                  moduleName = "XPProduct"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chensibin/Desktop/XPProduct/XPProduct/Classes/Buy(%E9%A6%96%E9%A1%B5)/Controller/XPBuyDetailViewController.m"
-                  timestampString = "566153542.112105"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "555"
-                  endingLineNumber = "555"
-                  offsetFromSymbolStart = "240">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__44-[XPBuyDetailViewController showDetailImage]_block_invoke_2"
-                  moduleName = "XPProduct"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chensibin/Desktop/XPProduct/XPProduct/Classes/Buy(%E9%A6%96%E9%A1%B5)/Controller/XPBuyDetailViewController.m"
-                  timestampString = "566153542.117375"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "555"
-                  endingLineNumber = "555"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.443"
-                  moduleName = "XPProduct"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/chensibin/Desktop/XPProduct/XPProduct/Classes/Buy(%E9%A6%96%E9%A1%B5)/Controller/XPBuyDetailViewController.m"
-                  timestampString = "566153542.121496"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "555"
-                  endingLineNumber = "555"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "XPProduct/Classes/Main(&#x4e3b;&#x8981;)/Controller/XPScreeningResultViewController.m"
-            timestampString = "566532649.987983"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "-setDropView"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "XPProduct/Classes/Main(&#x4e3b;&#x8981;)/Controller/XPScreeningResultViewController.m"
-            timestampString = "566532649.989019"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "-webViewDidFinishLoad:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

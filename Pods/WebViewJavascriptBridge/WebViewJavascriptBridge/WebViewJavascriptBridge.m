@@ -158,12 +158,14 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"loadFinished" object:nil];
+
     if (webView != _webView) { return; }
     
     __strong WVJB_WEBVIEW_DELEGATE_TYPE* strongDelegate = _webViewDelegate;
     if (strongDelegate && [strongDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [strongDelegate webViewDidFinishLoad:webView];
-    }
+            }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {

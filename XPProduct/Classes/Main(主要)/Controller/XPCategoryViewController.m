@@ -23,9 +23,9 @@
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"productCategoryContainAll" ofType:@"plist"];
     NSDictionary *categoryData = [NSDictionary dictionaryWithContentsOfFile:filePath];
     CGRect frame = CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_NavBar_Height));
-    if (IS_IPHONE_X){
-        frame.size.height = frame.size.height-XP_BottomBar_Height;
-    }
+//    if (IS_IPHONE_X){
+//        frame.size.height = frame.size.height-XP_BottomBar_Height;
+//    }
     XPCategoryView *categoryView =  [[XPCategoryView alloc]initWithFrame:frame categoryData:categoryData];
     categoryView.delegate = self;
     [categoryView show];

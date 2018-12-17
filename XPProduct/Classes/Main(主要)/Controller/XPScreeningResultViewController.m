@@ -156,9 +156,9 @@ static NSString  *XPSaleInfoTableViewCellID = @"XPSaleInfoTableViewCellID";
     }
     
     UITableView *tableView = [[UITableView alloc]initWithFrame:frame];
-    if (IS_IPHONE_X){
-        tableView.height = tableView.height - XP_BottomBar_Height+8;
-    }
+//    if (IS_IPHONE_X){
+//        tableView.height = tableView.height - XP_BottomBar_Height+8;
+//    }
     tableView.dataSource =self;
     tableView.delegate = self;
     if (self.isSale){

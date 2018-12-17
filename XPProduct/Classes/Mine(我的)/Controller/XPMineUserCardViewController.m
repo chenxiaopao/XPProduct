@@ -19,7 +19,7 @@
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,strong) NSString *avatar;
 @property (nonatomic,assign) NSInteger user_id;
-
+@property (nonatomic,weak) UIImage *shadowImage;
 @end
 
 @implementation XPMineUserCardViewController
@@ -93,9 +93,16 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super  viewWillAppear:animated];
+    self.shadowImage = self.navigationController.navigationBar.shadowImage;
     [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init] ];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init]];
     self.navigationController.navigationBar.translucent = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [self.navigationController.navigationBar setShadowImage:self.shadowImage];
+    [super viewWillDisappear:animated];
+    
 }
 
 @end

@@ -117,9 +117,9 @@ static NSString *const collectSaleCellID=@"collectSaleCellID";
 
 - (void)setTableView{
     CGFloat height = XP_SCREEN_HEIGHT-(XP_NavBar_Height)-50;
-    if (IS_IPHONE_X){
-        height = height - XP_BottomBar_Height;
-    }
+//    if (IS_IPHONE_X){
+//        height = height - XP_BottomBar_Height;
+//    }
     CGRect frame = CGRectMake(0, 0, XP_SCREEN_WIDTH, height);
     
     UITableView *tableView =  [[UITableView alloc]initWithFrame:frame];

@@ -46,13 +46,14 @@ static int const bottomBtnTag = 3000;
     UIButton *leftBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, frameY , XP_SCREEN_WIDTH-20, 40)];
     [self setBtnPropertyWithBtn:leftBtn andTitle:leftTitle andBackgroundColor:[UIColor blueColor]];
     leftBtn.tag = bottomBtnTag;
-    [self setBtnRadiusWithBtn:leftBtn androundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft];
+    [self setBtnRadiusWithBtn:leftBtn androundingCorners:UIRectCornerAllCorners];
     [self.view addSubview:leftBtn];
 
 }
 
 - (void)updatePurchaseState:(NSString *)state andTitle:(NSString *)title{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     hud.label.text = [NSString stringWithFormat:@"正在%@。。。",title];
     [[XPNetWorkTool shareTool] publishPurchaseInfoWithArr:nil andModel:self.purchaseModel andState:state andCallBack:^(BOOL tag) {
         if(tag){

@@ -267,6 +267,7 @@ static NSString *const saleDetailNormalCellID = @"saleDetailNormalCellID";
     if (indexPath.section == 0){
         XPSaleDetailUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:saleDetailUserTableViewCellID forIndexPath:indexPath];
         cell.purchaseModel = self.purchaseModel;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }else{
         XPSaleDetailNormalTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:saleDetailNormalCellID];

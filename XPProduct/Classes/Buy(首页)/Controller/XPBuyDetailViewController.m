@@ -25,7 +25,8 @@
 #import <MJExtension/MJExtension.h>
 #import "XPBuyNoCommentView.h"
 #import "XPCommentModel.h"
-@interface XPBuyDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,XPBuyDetailHeadViewDelegate,XPBuyNoCommentViewDelegate,UIWebViewDelegate>
+#import <MBProgressHUD/MBProgressHUD.h>
+@interface XPBuyDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,XPBuyDetailHeadViewDelegate,XPBuyNoCommentViewDelegate>
 
 @property (nonatomic,weak) UIView *alphaView;
 @property (nonatomic,weak) UITableView *tableView;
@@ -39,11 +40,18 @@
 @property (nonatomic,strong) UIImage *shadowImage;
 @property (nonatomic,weak) UIButton *collectBtn;
 @property (nonatomic,weak) UIImageView *imageView;
+@property (nonatomic,weak) UIView *bgView;
+@property (nonatomic,weak) MBProgressHUD *hud;
+@property (nonatomic,weak) UIView *coverView;
 @end
+
 
 static NSString *const productInfoCellID = @"productInfoCellID";
 static NSString *const userInfoCellID = @"userInfoCellID";
 static NSString *const commentInfoCellID = @"commentInfoCellID";
+
+CGFloat pinchChangeValue;
+CGPoint panChangeValueOld;
 
 @implementation XPBuyDetailViewController
 
@@ -61,12 +69,14 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     }
     return self;
 }
+
 - (void)loadCommentDataWithProduct_id:(NSInteger)product_id{
     [[XPNetWorkTool shareTool]loadCommentInfoWithProduct_Id:product_id UserId:0 andCallback:^(NSArray * modelArr) {
         self.commentModelArr = [XPCommentModel mj_objectArrayWithKeyValuesArray:modelArr];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
+
 - (void)loadHistoryDataWithProduct_id:(NSInteger)product_id{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy-MM-dd hh:mm:ss";
@@ -118,39 +128,131 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
     
+    self.view.backgroundColor = [UIColor whiteColor];
     [self setTableViewAndWebView];
+    
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [self.navigationController.navigationBar setShadowImage:self.shadowImage];
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self setHud];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webViewLoad) name:@"loadFinished" object:nil];
+    
+}
+
+- (void)webViewLoad{
+    
     [self setTableHeadViewAndFooterView];
     [self addAlphaView];
     [self addObserver];
     [self addBottomView];
+    self.shadowImage = self.navigationController.navigationBar.shadowImage;
+    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init]];
+    //    self.navigationController.navigationBar.translucent =  YES;
+    [self loadCommentDataWithProduct_id:self.supplyModel._id];
+    self.hud.label.text = @"加载成功";
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.hud removeFromSuperview];
+        [self.coverView removeFromSuperview];
+    });
+    
     
 }
 
+
+- (void)setHud{
+    UIView *coverView = [[UIView alloc]initWithFrame:self.view.bounds];
+    coverView.backgroundColor = [UIColor whiteColor];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    self.coverView = coverView;
+    [window addSubview:coverView];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:coverView animated:YES];
+    hud.label.text = @"正在加载中";
+    hud.mode = MBProgressHUDModeIndeterminate;
+    self.hud = hud;
+}
+
 - (void)addBigImageView{
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectZero];
+    
+    UIImageView *imageView = [[UIImageView alloc]init];
     self.imageView = imageView;
     imageView.center = self.view.center;
     imageView.backgroundColor = [UIColor blackColor];
-    imageView.alpha = 0;
+//    imageView.alpha = 0;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideImageView)];
+    //缩放手势
+    UIPinchGestureRecognizer * pinch = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(pinchAction:)];
+    [imageView addGestureRecognizer:pinch];
+    
+    //移动手势
+    UIPanGestureRecognizer * pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panAction:)];
+    [imageView addGestureRecognizer:pan];
+    
     [imageView addGestureRecognizer:tap];
     imageView.userInteractionEnabled = YES;
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window addSubview:imageView];
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_StatusBar_Height))];
+    bgView.backgroundColor = [UIColor blackColor];
+    [bgView addGestureRecognizer:tap];
+    [bgView addSubview:imageView];
+    imageView.center = bgView.center;
+    [imageView sizeToFit];
+    imageView.bounds = CGRectMake(0, 0, XP_SCREEN_WIDTH, 300);
+    self.bgView = bgView;
+    [window addSubview:bgView];
 }
+
+-(void)pinchAction:(UIPinchGestureRecognizer *)sender{
+
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        pinchChangeValue = 1;
+        return;
+    }
+    CGFloat change = 1 - (pinchChangeValue - sender.scale);
+    sender.view.transform = CGAffineTransformScale(sender.view.transform, change, change);
+    pinchChangeValue = sender.scale;
+}
+
+-(void)panAction:(UIPanGestureRecognizer *)sender{
+    
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        panChangeValueOld = sender.view.center;
+        return;
+    }
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [sender translationInView:self.view];
+        
+        
+        float newY = panChangeValueOld.y + translation.y;
+        float newX = panChangeValueOld.x + translation.x;
+        sender.view.center = CGPointMake(newX, newY);
+    }
+    
+}
+
 
 - (void)hideImageView{
     [UIView animateWithDuration:0.5 animations:^{
         
         
-        self.imageView.alpha = 0;
-        self.imageView.center = self.view.center;
-        self.imageView.frame = CGRectZero;
+//        self.imageView.alpha = 0;
+        self.bgView.alpha = 0;
+//        self.imageView.center = self.view.center;
+//        self.imageView.frame = CGRectZero;
+    
         
     } completion:^(BOOL finished) {
-        [self.imageView removeFromSuperview];
+        
+        [self.bgView removeFromSuperview];
     }];
     
     
@@ -385,7 +487,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     
     
     UIWebView *webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, XP_SCREEN_HEIGHT, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT)];
-    webView.delegate = self;
+    
     [scrollView addSubview:webView];
     self.webView = webView;
     [self.view addSubview:scrollView];
@@ -406,21 +508,8 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     
     tableView.scrollEnabled = NO;
     webView.scrollView.scrollEnabled = NO;
+
     
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [self.navigationController.navigationBar setShadowImage:self.shadowImage];
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.shadowImage = self.navigationController.navigationBar.shadowImage;
-    [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc]init] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc]init]];
-//    self.navigationController.navigationBar.translucent =  YES;
-    [self loadCommentDataWithProduct_id:self.supplyModel._id];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -468,7 +557,6 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
 //    }
     
 }
-
 
 
 
@@ -564,23 +652,23 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     }];
 }
 
-
 #pragma mark - WebViewJavascriptBridge
 
 - (void)showDetailImage{
     [self.bridge registerHandler:@"showDetailImage" handler:^(id data, WVJBResponseCallback responseCallback) {
+   
         [self addBigImageView];
         NSDictionary *dict = (NSDictionary *)data;
         NSString *imageUrl = dict[@"key"];
         imageUrl = [imageUrl substringFromIndex:7];
         NSLog(@"我帅%@",imageUrl);
-        [UIView animateWithDuration:1 animations:^{
-            CGRect rect = CGRectMake(0, XP_StatusBar_Height, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_StatusBar_Height));
-            
-            self.imageView.frame = self.view.bounds;
-            self.imageView.alpha = 1;
+//        [UIView animateWithDuration:1 animations:^{
+//            CGRect rect = CGRectMake(0, XP_StatusBar_Height, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_StatusBar_Height));
+//
+//            self.imageView.frame = self.view.bounds;
+//            self.imageView.alpha = 1;
             self.imageView.image = [UIImage imageWithContentsOfFile:imageUrl];
-        }];
+//        }];
     }];
     
 }
@@ -606,6 +694,7 @@ static NSString *const commentInfoCellID = @"commentInfoCellID";
     }
     
 }
+
 - (void)setImageFromDownloaderOrDiskByImageUrlArray:(NSArray *)imageArray{
     SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);

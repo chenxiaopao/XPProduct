@@ -14,9 +14,11 @@
 #import "MJExtension.h"
 #import "WebViewJavascriptBridge.h"
 #import "SDWebImageManager.h"
-@interface XPInfoDetailViewController ()
+#import <MBProgressHUD/MBProgressHUD.h>
+@interface XPInfoDetailViewController () <UIWebViewDelegate>
 @property (nonatomic,weak) UIWebView *webView;
 @property (nonatomic,strong) WebViewJavascriptBridge *bridge;
+@property (nonatomic,weak) MBProgressHUD *hud;
 
 @end
 
@@ -29,10 +31,19 @@
     }
     return _webView;
 }
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.label.text = @"正在加载中";
+    hud.mode = MBProgressHUDModeIndeterminate;
+    self.hud = hud;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"详情";
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.path]];
+    self.webView.delegate = self;
     [self.webView loadRequest:request];
     
 //    [WebViewJavascriptBridge enableLogging];
@@ -45,6 +56,17 @@
 //    }];
     
 }
+
+
+#pragma mark - UIWebViewDelegate
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    [self.hud removeFromSuperview];
+}
+
+
+
+#pragma mark - Others
 - (void)setWebViewDataByData:(id)result{
     [XPInfoDetailModel mj_setupObjectClassInArray:^NSDictionary *{
         return @{

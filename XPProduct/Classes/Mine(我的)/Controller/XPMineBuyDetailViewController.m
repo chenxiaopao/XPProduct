@@ -55,7 +55,8 @@ static int const buyBottomBtnTag = 3000;
     UIButton *leftBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, frameY, (XP_SCREEN_WIDTH-20), 40)];
     [self setBtnPropertyWithBtn:leftBtn andTitle:leftTitle andBackgroundColor:[UIColor blueColor]];
     leftBtn.tag = buyBottomBtnTag;
-    [self setBtnRadiusWithBtn:leftBtn androundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft];
+    
+    [self setBtnRadiusWithBtn:leftBtn androundingCorners:UIRectCornerAllCorners];
     [self.view addSubview:leftBtn];
     
     

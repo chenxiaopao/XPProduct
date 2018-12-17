@@ -131,14 +131,14 @@ static NSString *const mineSaleCellID = @"mineSaleCellID";
     CGFloat height;
     if (self.user_id != 0){
         height = self.height-50;
-        if (IS_IPHONE_X==1){
-            height = height - XP_BottomBar_Height;
-        }
+//        if (IS_IPHONE_X==1){
+//            height = height - XP_BottomBar_Height;
+//        }
     }else{
         height = XP_SCREEN_HEIGHT-(XP_NavBar_Height)-50;
-        if (IS_IPHONE_X==1){
-            height = height - XP_BottomBar_Height;
-        }
+//        if (IS_IPHONE_X==1){
+//            height = height - XP_BottomBar_Height;
+//        }
 
        
     }
