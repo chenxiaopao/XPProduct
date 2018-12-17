@@ -200,7 +200,7 @@ CGPoint panChangeValueOld;
     [imageView addGestureRecognizer:tap];
     imageView.userInteractionEnabled = YES;
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT-(XP_StatusBar_Height))];
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, XP_SCREEN_WIDTH, XP_SCREEN_HEIGHT)];
     bgView.backgroundColor = [UIColor blackColor];
     [bgView addGestureRecognizer:tap];
     [bgView addSubview:imageView];
